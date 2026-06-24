@@ -4,7 +4,7 @@ from typing import List, Union
 class Settings(BaseSettings):
     app_name: str = "FastAPI Shop"
     debug: bool = True
-    database_url: str 
+    database_url: str = "postgresql+asyncpg://user:password@localhost/fastapi-shopDB"
     cors_origins: Union[List[str], str] = [
         "http://localhost:5173",
         "http://localhost:3000",
