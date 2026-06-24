@@ -81,3 +81,5 @@ shop.db
 .vscode
 celerybeat-schedule
 celerybeat-schedule-wal
+
+poetry.lock

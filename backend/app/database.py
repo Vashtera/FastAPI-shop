@@ -2,16 +2,14 @@ from sqlalchemy.ext.asyncio import create_async_engine, AsyncSession, async_sess
 from sqlalchemy.orm import DeclarativeBase
 from .config import settings
 
-engine = create_async_engine(
-    settings.database_url,
-    connent_args={"check_same_thread": False}
+engine = create_async_engine(settings.database_url)
+SessionLocal = async_sessionmaker(
+    bind=engine,
+    class_=AsyncSession,
+    expire_on_commit=False
 )
-SessionLocal = async_sessionmaker( 
-                                   class_=AsyncSession, 
-                                   autocommit=False, 
-                                   autoflush=False, 
-                                   bind=engine
-                )
+
+
 class Base(DeclarativeBase):
     pass
 
@@ -22,7 +20,8 @@ async def get_db():
     finally:
         await db.close()
 
-def init_db():
-    Base.metadata.create_all(bind=engine)
+async def init_db():
+    async with engine.begin() as conn:
+        await conn.run_sync(Base.metadata.create_all)
 
 
