@@ -9,9 +9,16 @@ class UserRepo:
     def __init__(self, session: AsyncSession):
         self.session = session
 
+
     async def get_by_id(self, user_id: int) -> Optional[User]:
         result = await self.session.execute(select(User).where(User.id == user_id))
         return result.scalar_one_or_none()
+    
+
+    async def get_by_login(self, login: str) -> Optional[User]:
+        result = await self.session.execute(select(User).where(User.login == login))
+        return result.scalar_one_or_none()
+
     
     async def create_user(
             self, 
