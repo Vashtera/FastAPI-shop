@@ -1,12 +1,14 @@
 from datetime import datetime, timedelta, timezone
-from fastapi import FastAPI
+from typing import Optional
+from fastapi import APIRouter
 from fastapi.security import OAuth2PasswordBearer, OAuth2PasswordRequestForm
 from jose import jwt, JWTError
 from passlib.context import CryptContext
 from contextlib import asynccontextmanager
 from ..repositories.users_repo import UserRepo
+from sqlalchemy.ext.asyncio import AsyncSession
 
-app = FastAPI(title="FastAPI-Shop")
+router = APIRouter()
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="login") 
 
