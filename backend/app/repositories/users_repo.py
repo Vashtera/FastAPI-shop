@@ -14,8 +14,8 @@ class UserRepo:
         return result.scalar_one_or_none()
     
 
-    async def get_by_login(self, login: str) -> Optional[User]:
-        result = await self.session.execute(select(User).where(User.login == login))
+    async def get_by_email(self, email: str) -> Optional[User]:
+        result = await self.session.execute(select(User).where(User.email == email))
         return result.scalar_one_or_none()
 
     

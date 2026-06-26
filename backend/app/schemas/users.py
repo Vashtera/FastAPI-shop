@@ -9,7 +9,6 @@ class UserBase(BaseModel):
 
     first_name: str = Field(..., min_length=2, description="Имя пользователя, минимум 2 символа")
     last_name: str = Field(..., min_length=2, description="Фамилия пользователя, минимум 2 символа")
-    email: EmailStr = Field(..., description="Email пользователя")
 
 
 class UserCreate(UserBase):
@@ -19,7 +18,7 @@ class UserCreate(UserBase):
     Используется при регистрации.
     """
     
-    login: str = Field(..., min_length=5, description="Логин пользователя, минимум 5 символов")
+    email: EmailStr = Field(..., description="Email пользователя")
     password: str = Field(..., description="Введите свой пароль от 8 символов")
     
     @field_validator("password")
