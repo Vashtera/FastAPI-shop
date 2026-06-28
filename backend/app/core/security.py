@@ -1,6 +1,7 @@
 from datetime import UTC, datetime, timedelta
 
 import jwt 
+from jwt.exceptions import InvalidTokenError
 from fastapi.security import OAuth2PasswordBearer
 from pwdlib import PasswordHash
 
@@ -43,7 +44,7 @@ def verify_access_token(token: str) -> str | None:
             algorithms=[settings.algorithm],
             options={"require": ["exp", "sub"]},
         )
-    except jwt.InvalidTokenError:
+    except InvalidTokenError:
         return None
     else:
         return payload.get("sub") # sub = User id
