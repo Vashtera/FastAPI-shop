@@ -1,6 +1,6 @@
-from fastapi import Depends, HTTPException, status
+from fastapi import HTTPException, status
 from sqlalchemy.ext.asyncio import AsyncSession
-from ..schemas.users import UserCreate, UserResponse
+from ..schemas.users import UserCreate
 from ..repositories.users_repo import UserRepo
 
 
