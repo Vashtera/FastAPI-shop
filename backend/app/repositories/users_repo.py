@@ -1,6 +1,6 @@
 from typing import Optional
 from sqlalchemy.ext.asyncio import AsyncSession
-from sqlalchemy import select
+from sqlalchemy import select, func
 from ..models.users import User
 from ..schemas.users import UserCreate
 
@@ -11,12 +11,12 @@ class UserRepo:
 
     async def get_by_id(self, user_id: int) -> Optional[User]:
         result = await self.session.execute(select(User).where(User.id == user_id))
-        return result.scalar_one_or_none()
+        return result.scalars().first()
     
 
     async def get_by_email(self, email: str) -> Optional[User]:
-        result = await self.session.execute(select(User).where(User.email == email))
-        return result.scalar_one_or_none()
+        result = await self.session.execute(select(User).where(func.lower(User.email) == email.lower()))
+        return result.scalars().first()
 
     
     async def create_user(
