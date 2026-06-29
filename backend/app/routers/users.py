@@ -1,17 +1,15 @@
-from typing import Annotated
 from ..core.security import (
     hash_password, verify_password, create_access_token, verify_access_token
 )
 from ..services.auth import register
 from ..schemas.users import UserCreate
 from fastapi import Depends, APIRouter, FastAPI
-from sqlalchemy.ext.asyncio import AsyncSession
+from ..services.dependencies import get_session
 
 app = FastAPI()
 router = APIRouter()
 
-def get_session()
-
 
 @router.post("/registration")
-async def register(data: UserCreate, session: )
+async def registration(user: UserCreate, session =  Depends(get_session)):
+    return await register(user, session)
