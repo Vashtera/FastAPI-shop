@@ -3,6 +3,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 
 from ..repositories.users_repo import UserRepo
 from ..schemas.users import UserCreate
+from ..core.security import verify_password
 
 
 async def register(user: UserCreate, db: AsyncSession):
@@ -29,3 +30,15 @@ async def register(user: UserCreate, db: AsyncSession):
             detail="Username already exist",
         )
     return await repo.create_user(user)
+
+
+async def authenticate_user(email: str, password: str, db: AsyncSession):
+    repo = UserRepo(db)
+    user = await repo.get_by_email(email)
+    if not user:
+        return False
+    if not verify_password(password, user.hashed_password):
+        return False
+    return user
+
+

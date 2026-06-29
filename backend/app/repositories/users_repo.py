@@ -28,12 +28,12 @@ class UserRepo:
             user_id: уникальный идентификатор пользователя
 
         Returns:
-            Объект User или None если не найден
+            Объект User или None 
         """
         result = await self.session.execute(
             select(User).where(User.id == user_id)
         )
-        return result.scalars().first()
+        return result.scalar_one_or_none()
 
     async def get_by_email(self, email: str) -> Optional[User]:
         """
@@ -43,12 +43,12 @@ class UserRepo:
             email: email адрес пользователя
 
         Returns:
-            Объект User или None если не найден
+            Объект User или None
         """
         result = await self.session.execute(
             select(User).where(func.lower(User.email) == email.lower())
         )
-        return result.scalars().first()
+        return result.scalar_one_or_none()
 
     async def create_user(self, user_data: UserCreate) -> User:
         """
