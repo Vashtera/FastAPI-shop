@@ -1,28 +1,68 @@
 from typing import Optional
+
+from sqlalchemy import func, select
 from sqlalchemy.ext.asyncio import AsyncSession
-from sqlalchemy import select, func
+
 from ..models.users import User
 from ..schemas.users import UserCreate
 
+
 class UserRepo:
+    """
+    Репозиторий для работы с таблицей users.
+    Содержит все запросы к БД связанные с пользователями.
+    """
+
     def __init__(self, session: AsyncSession):
+        """
+        Args:
+            session: асинхронная сессия SQLAlchemy
+        """
         self.session = session
 
-
     async def get_by_id(self, user_id: int) -> Optional[User]:
-        result = await self.session.execute(select(User).where(User.id == user_id))
+        """
+        Получить пользователя по ID.
+
+        Args:
+            user_id: уникальный идентификатор пользователя
+
+        Returns:
+            Объект User или None если не найден
+        """
+        result = await self.session.execute(
+            select(User).where(User.id == user_id)
+        )
         return result.scalars().first()
-    
 
     async def get_by_email(self, email: str) -> Optional[User]:
-        result = await self.session.execute(select(User).where(func.lower(User.email) == email.lower()))
+        """
+        Получить пользователя по email
+
+        Args:
+            email: email адрес пользователя
+
+        Returns:
+            Объект User или None если не найден
+        """
+        result = await self.session.execute(
+            select(User).where(func.lower(User.email) == email.lower())
+        )
         return result.scalars().first()
 
-    
-    async def create_user(
-            self, 
-            user_data: UserCreate
-            ) -> User:
+    async def create_user(self, user_data: UserCreate) -> User:
+        """
+        Создать нового пользователя в БД.
+
+        Args:
+            user_data: валидированные данные пользователя
+
+        Returns:
+            Созданный объект User с присвоенным id
+
+        Raises:
+            Exception: при ошибке создания откатывает транзакцию
+        """
         try:
             db_user = User(**user_data.model_dump())
             self.session.add(db_user)
