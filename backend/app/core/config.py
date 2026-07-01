@@ -1,6 +1,9 @@
+from pathlib import Path
 from pydantic import SecretStr
 from pydantic_settings import BaseSettings, SettingsConfigDict
 from typing import List, Union
+
+BASE_DIR = Path(__file__).resolve().parent.parent.parent
 
 class Settings(BaseSettings):
     app_name: str = "FastAPI Shop"
@@ -10,8 +13,8 @@ class Settings(BaseSettings):
     algorithm: str = "HS256"
     access_token_expires_minutes: int = 30
     model_config = SettingsConfigDict(
-        env_file=".env",
-        env_file_encoding="utf-8"
+        env_file=BASE_DIR / ".env",
+        env_file_encoding="utf-8",
     )
     cors_origins: Union[List[str], str] = [
         "http://localhost:5173",
