@@ -2,10 +2,10 @@ from datetime import datetime
 from sqlalchemy import String, ForeignKey, Text, DECIMAL, Date
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 from ..database import Base
-from ..models.categories import Categories
+from ..models.categories import Category
 
-class Products(Base):
-    __tablename__ = "products"
+class Product(Base):
+    __tablename__ = "product"
 
     id: Mapped[int] = mapped_column(primary_key=True, index=True)
     category_id: Mapped[int] = mapped_column(ForeignKey("categories.id"))
@@ -15,7 +15,7 @@ class Products(Base):
     created_at: Mapped[datetime] = mapped_column(Date, default=datetime.utcnow)
     image_url: Mapped[str] = mapped_column(String)
 
-    category: Mapped["Categories"] = relationship(back_populates="products")
+    category: Mapped["Category"] = relationship(back_populates="product")
 
     def __repr__(self) -> str:
-        return f"<Products(id={self.id}, name='{self.name}', price={self.price})>"
+        return f"<Product(id={self.id}, name='{self.name}', price={self.price})>"
