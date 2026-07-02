@@ -15,3 +15,5 @@ class CategoryResponse(CategoryBase):
     model_config = ConfigDict(
         from_attributes=True,  # позволяет создавать схему из SQLAlchemy объекта
     )
+
+    
