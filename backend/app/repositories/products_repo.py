@@ -24,11 +24,13 @@ class ProductRepo():
         )
         return result.scalar_one_or_none()
     
-    async def get_by_name(self, name: str) -> Optional[Product]:
+    async def get_multiple_by_ids(self, product_ids: list[int]) -> list[Product]:
         result = await self.session.execute(
-            select(Product).where(func.lower(Product.name) == name.lower())
+            select(Product)
+            .options(joinedload(Product.category))
+            .where(Product.id == product_ids)
         )
-        return result.scalar_one_or_none()
+        return result.scalars().all()
     
     async def get_by_category_id(self, category_id: int) -> List[Product]:
         result = await self.session.execute(
