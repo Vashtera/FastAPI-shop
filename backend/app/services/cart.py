@@ -5,11 +5,32 @@ from ..schemas.cart import CartCreate, CartItem, CartItemUpdate, CartResponse
 
 
 class CartService:
+    """
+    Сервис для управления корзиной покупателя.
+    Корзина хранится как словарь dict[int, int] где:
+    - ключ: id продукта
+    - значение: количество товара
+    """
     def __init__(self, db: AsyncSession):
         self.session = ProductRepo(db)
 
-#тут dict[int, int] - означаем первое - id продукта, а второй int это количество товара
+
     async def add_to_cart(self, cart_data: dict[int, int], item: CartCreate) -> dict[int, int]:
+        """
+        Добавить товар в корзину.
+        Если товар уже есть — увеличивает количество.
+        Если товара нет — создаёт новую позицию.
+
+        Args:
+            cart_data: текущее состояние корзины
+            item: данные добавляемого товара (id и количество)
+
+        Returns:
+            Обновлённая корзина
+
+        Raises:
+            HTTPException 404: если товар не найден в БД
+        """
         product = await self.session.get_by_id(item.product_id)
         if not product:
             raise HTTPException(
@@ -24,7 +45,21 @@ class CartService:
 
         return cart_data
     
+
     def update_cart_item(self, cart_data: dict[int, int], item: CartCreate) -> dict[int, int]:
+        """
+        Обновить количество товара в корзине.
+
+        Args:
+            cart_data: текущее состояние корзины
+            item: данные товара с новым количеством
+
+        Returns:
+            Обновлённая корзина
+
+        Raises:
+            HTTPException 404: если товар не найден в корзине
+        """
         if item.product_id not in cart_data:
             raise HTTPException(
                 status_code=status.HTTP_404_NOT_FOUND,
@@ -34,6 +69,19 @@ class CartService:
         return cart_data
     
     def remove_from_cart(self, cart_data: dict[int, int], product_id: int) ->dict[int, int]:
+        """
+        Удалить товар из корзины.
+
+        Args:
+            cart_data: текущее состояние корзины
+            product_id: id удаляемого товара
+
+        Returns:
+            Корзина без удалённого товара
+
+        Raises:
+            HTTPException 404: если товар не найден в корзине
+        """
         if product_id not in cart_data:
             raise HTTPException(
                 status_code=status.HTTP_404_NOT_FOUND,
@@ -43,6 +91,15 @@ class CartService:
         return cart_data
     
     async def get_cart_details(self, cart_data: dict[int, int]) -> CartResponse:
+        """
+        Получить детальную информацию о корзине с ценами и итогами.
+
+        Args:
+            cart_data: текущее состояние корзины
+
+        Returns:
+            CartResponse с полной информацией о товарах, общей суммой и количеством
+        """
         if not cart_data:
             return CartResponse(items=[], total=0,0, items_count=0)
         
