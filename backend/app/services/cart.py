@@ -1,7 +1,7 @@
 from sqlalchemy.ext.asyncio import AsyncSession
 from fastapi import HTTPException, status
 from ..repositories.products_repo import ProductRepo
-from ..schemas.cart import CartCreate, CartItem, CartItemUpdate, CartResponse
+from ..schemas.cart import CartCreate, CartItem, CartResponse
 
 
 class CartService:
@@ -101,7 +101,7 @@ class CartService:
             CartResponse с полной информацией о товарах, общей суммой и количеством
         """
         if not cart_data:
-            return CartResponse(items=[], total=0,0, items_count=0)
+            return CartResponse(items=[], total=0.0, items_count=0)
         
         product_ids = list(cart_data.keys())
         products = await self.session.get_multiple_by_ids(product_ids)
