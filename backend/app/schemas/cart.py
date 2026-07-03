@@ -11,6 +11,10 @@ class CartCreate(CartBase):
     pass
 
 
+class CartItemUpdate(CartBase):
+    pass
+
+
 class CartItem(CartBase):
     name: str = Field(..., description="Имя товара в корзине")
     price: float = Field(..., description="Цена товара в корзине")
@@ -21,6 +25,6 @@ class CartItem(CartBase):
 
 
 class CartResponse(BaseModel):
-    items: list[CartItem] = Field(..., description="лист товаров в корзине")
+    items: list[CartItem] = Field(..., description="Лист товаров в корзине")
     total: float = Field(..., description="Итоговая стоимость корзины")
     items_count: int = Field(..., description="Общее количество товара в корзине")
