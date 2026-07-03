@@ -47,5 +47,25 @@ class CartService:
             return CartResponse(items=[], total=0,0, items_count=0)
         
         product_ids = list(cart_data.keys())
-        products = self.session.get_multiple_by_ids()
+        products = await self.session.get_multiple_by_ids(product_ids)
+        products_dict = {product.id: product for product in products}
 
+        cart_items = []
+        total_price = 0.0
+        total_items = 0
+
+        for product_id, quantity in cart_data.items():
+            if product_id in products_dict:
+                product = products_dict[product_id]
+                subtotal = product.price * quantity
+
+                cart_item = CartItem(product_id=product.id, quantity=quantity, name=product.name,
+                                     price=product.price, subtotal=subtotal, 
+                                     image_url=product.image_url
+                                    )
+                
+                cart_items.append(cart_item)
+                total_price += subtotal
+                total_items += quantity
+        
+        return CartResponse(items=cart_items, total=round(total_price), items_count=total_items)
