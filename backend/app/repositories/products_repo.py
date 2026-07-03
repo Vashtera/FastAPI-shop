@@ -30,7 +30,7 @@ class ProductRepo():
         )
         return result.scalar_one_or_none()
     
-    async def get_by_category(self, category_id: int) -> List[Product]:
+    async def get_by_category_id(self, category_id: int) -> List[Product]:
         result = await self.session.execute(
             select(Product)
             .options(joinedload(Product.category))
