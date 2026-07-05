@@ -2,7 +2,7 @@ from fastapi import APIRouter, Depends, status
 
 from ..services.cart import CartService 
 from ..services.dependencies import get_session
-from ..schemas.cart import AddToCartRequest, UpdateCartRequest, RemoveFromCartRequest, CartResponse, CartCreate, CartItem, CartItemUpdate
+from ..schemas.cart import AddToCartRequest, UpdateCartRequest, RemoveFromCartRequest, CartResponse, CartCreate, CartItemUpdate
 
 router = APIRouter(
     prefix='/api/cart',
