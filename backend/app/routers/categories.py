@@ -1,9 +1,8 @@
-from fastapi import APIRouter, Depends, status, HTTPException
-from sqlalchemy.ext.asyncio import AsyncSession
+from fastapi import APIRouter, Depends, status
 
 from ..services.categories import CategoryService as ctg_service
 from ..services.dependencies import get_session
-from ..schemas.categories import CategoryBase, CategoryCreate, CategoryResponse 
+from ..schemas.categories import CategoryResponse 
 
 router = APIRouter(
     prefix='/api/categories',

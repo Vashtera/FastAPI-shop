@@ -28,3 +28,15 @@ class CartResponse(BaseModel):
     items: list[CartItem] = Field(..., description="Лист товаров в корзине")
     total: float = Field(..., description="Итоговая стоимость корзины")
     items_count: int = Field(..., description="Общее количество товара в корзине")
+
+
+class AddToCartRequest(BaseModel):
+    product_id: int
+    quantity: int
+    cart: dict[int, int] = {}
+
+class UpdateCartRequest(AddToCartRequest):
+    pass
+
+class RemoveFromCartRequest(BaseModel):
+    cart: dict[int, int] = {}
