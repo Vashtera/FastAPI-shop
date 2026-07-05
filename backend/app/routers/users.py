@@ -8,7 +8,10 @@ from ..services.auth import authenticate_user, register
 from ..services.dependencies import get_session
 
 
-router = APIRouter()
+router = APIRouter(
+    prefix="/users", 
+    tags=["users"]
+)
 
 
 @router.post("/registration/", response_model=UserResponse)
