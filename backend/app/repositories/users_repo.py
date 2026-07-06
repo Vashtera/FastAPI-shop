@@ -51,6 +51,9 @@ class UserRepo:
         return result.scalar_one_or_none()
 
     async def create_user(self, user_data: UserCreate) -> User:
+        from app.core.security import hash_password
+        data = user_data.model_dump()
+        data["hashed_password"] = hash_password(data.pop("password"))
         """
         Создать нового пользователя в БД.
 
@@ -64,7 +67,7 @@ class UserRepo:
             Exception: при ошибке создания откатывает транзакцию
         """
         try:
-            db_user = User(**user_data.model_dump())
+            db_user = User(**data)
             self.session.add(db_user)
             await self.session.commit()
             await self.session.refresh(db_user)
