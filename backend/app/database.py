@@ -15,5 +15,15 @@ class Base(DeclarativeBase):
 
 
 async def init_db():
+    from app.models.users import User 
+    from app.models.categories import Category
+    from app.models.products import Product
+
+    # Проверяем в консоли, увидела ли SQLAlchemy твои таблицы перед созданием
+    print("\n=== ИНИЦИАЛИЗАЦИЯ БАЗЫ ДАННЫХ ===")
+    print(f"Найденные таблицы для создания: {list(Base.metadata.tables.keys())}")
+    
     async with engine.begin() as conn:
         await conn.run_sync(Base.metadata.create_all)
+        
+    print("=== СОЗДАНИЕ ТАБЛИЦ ЗАВЕРШЕНО ===\n")
