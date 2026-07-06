@@ -1,47 +1,47 @@
-<script setup>
-import HelloWorld from './components/HelloWorld.vue'
-import TheWelcome from './components/TheWelcome.vue'
-</script>
+<!-- frontend/src/App.vue -->
+<!--
+  Корневой компонент приложения.
+  Содержит общую структуру с Header и RouterView.
+-->
 
 <template>
-  <header>
-    <img alt="Vue logo" class="logo" src="./assets/logo.svg" width="125" height="125" />
+  <div id="app" class="min-h-screen bg-gray-50">
+    <!-- Шапка сайта -->
+    <Header />
 
-    <div class="wrapper">
-      <HelloWorld msg="You did it!" />
-    </div>
-  </header>
+    <!-- Основной контент (роутер) -->
+    <RouterView />
 
-  <main>
-    <TheWelcome />
-  </main>
+    <!-- Футер -->
+    <footer class="bg-white border-t-2 border-black mt-16">
+      <div class="max-w-7xl mx-auto px-4 py-8">
+        <div class="text-center text-gray-600">
+          <p class="mb-2">© 2024 FastAPI Shop. All rights reserved.</p>
+          <p class="text-sm">Built with FastAPI + Vue.js</p>
+        </div>
+      </div>
+    </footer>
+  </div>
 </template>
 
+<script setup>
+import { onMounted } from 'vue'
+import { RouterView } from 'vue-router'
+import Header from '@/components/Header.vue'
+import { useCartStore } from '@/stores/cart'
+
+const cartStore = useCartStore()
+
+/**
+ * Инициализация приложения
+ */
+onMounted(() => {
+  // Загрузить корзину из localStorage при запуске
+  cartStore.initCart()
+})
+</script>
+
 <style scoped>
-header {
-  line-height: 1.5;
-}
-
-.logo {
-  display: block;
-  margin: 0 auto 2rem;
-}
-
-@media (min-width: 1024px) {
-  header {
-    display: flex;
-    place-items: center;
-    padding-right: calc(var(--section-gap) / 2);
-  }
-
-  .logo {
-    margin: 0 2rem 0 0;
-  }
-
-  header .wrapper {
-    display: flex;
-    place-items: flex-start;
-    flex-wrap: wrap;
-  }
-}
+/* Убираем все переопределения стилей для #app */
+/* Tailwind классы полностью контролируют layout */
 </style>
