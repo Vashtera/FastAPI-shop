@@ -33,7 +33,7 @@ def update_cart(request: UpdateCartRequest, service: CartService = Depends(get_c
 
 
 @router.delete("/remove/{product_id}", status_code=status.HTTP_200_OK)
-async def remove_from_cart(
+def remove_from_cart(
     product_id: int,
     request: RemoveFromCartRequest, 
     service: CartService = Depends(get_cart_service)

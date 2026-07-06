@@ -28,7 +28,7 @@ class ProductRepo():
         result = await self.session.execute(
             select(Product)
             .options(joinedload(Product.category))
-            .where(Product.id == product_ids)
+            .where(Product.id.in_(product_ids))
         )
         return result.scalars().all()
     
