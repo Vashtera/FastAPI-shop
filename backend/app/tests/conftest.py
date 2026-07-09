@@ -5,7 +5,6 @@ os.environ["DATABASE_URL"] = (
 os.environ["SECRET_KEY"] = "test-secret-key-for-testing-only"
 
 import pytest
-from fastapi.testclient import TestClient
 from httpx import AsyncClient, ASGITransport
 from sqlalchemy.ext.asyncio import create_async_engine, async_sessionmaker, AsyncSession
 from sqlalchemy.pool import NullPool
@@ -69,7 +68,7 @@ async def setup_database(test_engine):
 подставится db_session из теста.
 '''
 @pytest.fixture
-async def db_session(test_engine, setup_databse):
+async def db_session(test_engine, setup_database):
     session_factory = async_sessionmaker(test_engine, expire_on_commit=False)
     async with session_factory() as session:
         yield session
@@ -87,7 +86,7 @@ async def client(db_session: AsyncSession):
     async def override_get_db():
         yield db_session
     
-    
+
     '''
     app.dependency_overrides — это словарь FastAPI специально для тестов, 
     позволяет подменять любые зависимости.
