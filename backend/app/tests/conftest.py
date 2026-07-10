@@ -109,5 +109,20 @@ async def client(db_session: AsyncSession):
     app.dependency_overrides.clear()
 
 
+@pytest.fixture
+async def sample_product(db_session):
+    from app.models.categories import Category
+    from app.models.products import Product
 
+    category = Category(name="Electronics", slug="electronics")
+    db_session.add(category)
+    await db_session.commit()
+    await db_session.refresh(category)
+
+    product = Product(name="Phone", price=999, category_id=category.id, description="Test phone description" )
+    db_session.add(product)
+    await db_session.commit()
+    await db_session.refresh(product)
+
+    return product
     
