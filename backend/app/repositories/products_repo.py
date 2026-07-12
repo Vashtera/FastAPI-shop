@@ -15,6 +15,7 @@ class ProductRepo():
     async def get_all(self) -> List[Product]:
         result = await self.session.execute(
             select(Product)
+            .options(joinedload(Product.category))
         )
         return result.scalars().all()
     

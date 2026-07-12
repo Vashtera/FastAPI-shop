@@ -109,7 +109,7 @@ async def client(db_session: AsyncSession):
     app.dependency_overrides.clear()
 
 
-@pytest.fixture
+@pytest.fixture(scope="function")
 async def sample_product(db_session):
     from app.models.categories import Category
     from app.models.products import Product
