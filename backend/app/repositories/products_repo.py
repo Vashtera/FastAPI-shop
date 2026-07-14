@@ -51,6 +51,7 @@ class ProductRepo():
         """
         result = await self.session.execute(
             select(Product).where(Product.id == id)
+            .options(joinedload(Product.category))
         )
         return result.scalar_one_or_none()
 

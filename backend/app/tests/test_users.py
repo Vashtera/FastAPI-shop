@@ -63,7 +63,7 @@ async def test_login(client: AsyncClient):
     # стандарт OAuth2, он ожидает данные в формате form-data
     # (application/x-www-form-urlencoded), а НЕ json.
     # Поэтому здесь data=, а не json=, как в регистрации.
-    #
+    
     # Поле называется именно "username", а не "email" —
     # это фиксированное требование OAuth2PasswordRequestForm,
     # даже если по факту логинимся через email.
@@ -80,7 +80,7 @@ async def test_login(client: AsyncClient):
     # одинаковым между запусками, поэтому сравнивать с конкретным
     # значением бессмысленно (assert response.json()["access_token"] == "..."
     # никогда бы не сработал).
-    #
+    
     # Вместо этого проверяем сам факт наличия ключа в ответе —
     # оператор "in" для словаря проверяет присутствие ключа,
     # не заглядывая в его значение.
