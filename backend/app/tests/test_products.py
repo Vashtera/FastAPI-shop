@@ -18,5 +18,13 @@ async def test_get_product_by_category(client: AsyncClient, sample_product):
     assert response.json()["products"][0]["name"] == "Phone"
 
 
-async def test_create_product(client: AsyncClient):
-    response = await client.post("")
+async def test_create_product(client: AsyncClient, sample_product):
+    response = await client.post("api/products/add", json={
+        "name": "Test1",
+        "price": 76.1,
+        "category_id": 1
+    }
+    )
+    print(response.json())
+    assert response.status_code == 201
+    assert response.json()["name"] == "Test1"

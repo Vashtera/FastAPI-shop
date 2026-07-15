@@ -84,7 +84,7 @@ class ProductService:
         Raises:
             HTTPException 404: если указанная категория не существует
         """
-        category = self.category_session.get_by_id(product_data.category_id)
+        category = await self.category_session.get_by_id(product_data.category_id)
         if not category:
             raise HTTPException(
                 status_code=status.HTTP_404_NOT_FOUND,

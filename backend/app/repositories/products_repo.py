@@ -110,7 +110,9 @@ class ProductRepo():
             self.session.add(db_product)
             await self.session.commit()
             await self.session.refresh(db_product)
-            return db_product
+            
+            # заново запрашиваем товар с категорией через joinedload
+            return await self.get_by_id(db_product.id)
         except Exception as e:
             await self.session.rollback()
             raise e
