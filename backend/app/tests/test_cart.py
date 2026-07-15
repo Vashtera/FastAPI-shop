@@ -12,3 +12,6 @@ async def test_add_to_cart(client: AsyncClient, sample_product):
 async def test_get_cart(client: AsyncClient):
     response = await client.get("/api/cart", json={})
     assert response.status_code == 200
+
+
+async def test_update_cart(client: AsyncClient)
