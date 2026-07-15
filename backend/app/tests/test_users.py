@@ -85,3 +85,60 @@ async def test_login(client: AsyncClient):
     # оператор "in" для словаря проверяет присутствие ключа,
     # не заглядывая в его значение.
     assert "access_token" in response.json()
+
+
+async def test_registration_exist_user(client: AsyncClient):
+    await client.post("/users/registration/", json={
+        "first_name": "Raul",
+        "last_name": "Aitbayev",
+        "email": "raul2@test.com",
+        "password": "12345678"
+    })
+
+    response = await client.post("/users/registration/", json={
+        "first_name": "aul",
+        "last_name": "itbayev",
+        "email": "raul2@test.com",
+        "password": "123456780"
+    })
+    assert response.status_code == 400
+
+
+async def test_login_with_wrong_password(client: AsyncClient):
+    await client.post("/users/registration/", json={
+        "first_name": "Raul",
+        "last_name": "Aitbayev",
+        "email": "raul2@test.com",
+        "password": "12345678"
+    })
+
+    response = await client.post("/users/login/", data={
+        "username": "raul2@test.com",
+        "password": "12345679"
+    })
+    assert response.status_code == 401
+
+
+async def test_login_with_unexist_email(client: AsyncClient):
+    await client.post("/users/registration/", json={
+        "first_name": "Raul",
+        "last_name": "Aitbayev",
+        "email": "raul2@test.com",
+        "password": "12345678"
+    })
+
+    response = await client.post("/users/login/", data={
+        "username": "raul3@test.com",
+        "password": "12345678"
+    })
+    assert response.status_code == 401
+
+
+async def test_registration_with_small_password(client: AsyncClient):
+    response = await client.post("/users/registration/", json={
+        "first_name": "Raul",
+        "last_name": "Aitbayev",
+        "email": "raul2@test.com",
+        "password": "1234567"
+    })
+    assert response.status_code == 422
