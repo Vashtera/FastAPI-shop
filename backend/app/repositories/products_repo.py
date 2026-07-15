@@ -90,7 +90,7 @@ class ProductRepo():
             .options(joinedload(Product.category))
             .where(Product.category_id == category_id)
         )
-        return result.scalar_one_or_none()
+        return result.scalars().all()
 
     async def create_product(self, product_data: ProductCreate) -> Product:
         """

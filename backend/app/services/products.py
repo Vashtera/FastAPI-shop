@@ -12,6 +12,7 @@ class ProductService:
         self.session = ProductRepo(db)
         self.category_session = CategoryRepo(db)
 
+
     async def get_all(self) -> ProductListResponse:
         """
         Получить список всех товаров.
@@ -23,6 +24,7 @@ class ProductService:
         products_response = [ProductResponse.model_validate(prod) for prod in products]
         return ProductListResponse(products=products, total=len(products_response))
     
+
     async def get_by_product_id(self, product_id: int) -> ProductResponse:
         """
         Получить товар по ID.
@@ -44,6 +46,7 @@ class ProductService:
             )
         return product
     
+
     async def get_by_category_id(self, category_id: int) -> ProductListResponse:
         """
         Получить все товары определённой категории.
@@ -66,6 +69,7 @@ class ProductService:
         products = await self.session.get_by_category_id(category_id)
         products_response = [ProductResponse.model_validate(prod) for prod in products]
         return ProductListResponse(products=products_response, total=len(products_response))
+    
     
     async def create_product(self, product_data: ProductCreate) -> ProductResponse:
         """
