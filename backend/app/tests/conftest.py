@@ -111,6 +111,22 @@ async def client(db_session: AsyncSession):
 
 @pytest.fixture(autouse=True)
 async def clean_database(db_session):
+    """
+    Автоматически очищает тестовую базу данных после каждого теста.
+
+    Фикстура выполняется для каждого теста благодаря `autouse=True`.
+    После завершения теста удаляет все записи из таблиц товаров,
+    категорий и пользователей, чтобы каждый тест начинался с
+    чистого состояния базы данных.
+
+    Args:
+        db_session: асинхронная сессия SQLAlchemy,
+        используемая для выполнения SQL-запросов.
+
+    Yields:
+        Управление передаётся тесту. После его выполнения
+        производится очистка базы данных.
+    """
     from sqlalchemy import delete
     from app.models.products import Product
     from app.models.categories import Category

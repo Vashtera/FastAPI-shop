@@ -91,14 +91,14 @@ async def test_registration_exist_user(client: AsyncClient):
     await client.post("/users/registration/", json={
         "first_name": "Raul",
         "last_name": "Aitbayev",
-        "email": "raul2@test.com",
+        "email": "raul10@test.com",
         "password": "12345678"
     })
 
     response = await client.post("/users/registration/", json={
         "first_name": "aul",
         "last_name": "itbayev",
-        "email": "raul2@test.com",
+        "email": "raul10@test.com",
         "password": "123456780"
     })
     assert response.status_code == 400
@@ -138,7 +138,7 @@ async def test_registration_with_small_password(client: AsyncClient):
     response = await client.post("/users/registration/", json={
         "first_name": "Raul",
         "last_name": "Aitbayev",
-        "email": "raul2@test.com",
+        "email": "raul4@test.com",
         "password": "1234567"
     })
     assert response.status_code == 422
