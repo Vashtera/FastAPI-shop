@@ -142,3 +142,39 @@ async def test_registration_with_small_password(client: AsyncClient):
         "password": "1234567"
     })
     assert response.status_code == 422
+
+
+async def test_login_success(client: AsyncClient):
+    await client.post("/users/registration/", json={
+        "first_name": "Test",
+        "last_name": "User",
+        "email": "login_test@test.com",
+        "password": "12345678"
+    })
+    response = await client.post("/users/login/", data={
+        "username": "login_test@test.com",
+        "password": "12345678"
+    })
+    assert response.status_code == 200
+
+
+async def test_login_wrong_password(client: AsyncClient):
+    await client.post("/users/registration/", json={
+        "first_name": "Test",
+        "last_name": "User",
+        "email": "wrongpass@test.com",
+        "password": "12345678"
+    })
+    response = await client.post("/users/login/", data={
+        "username": "wrongpass@test.com",
+        "password": "wrongpassword"
+    })
+    assert response.status_code == 401
+
+
+async def test_login_nonexistent_user(client: AsyncClient):
+    response = await client.post("/users/login/", data={
+        "username": "doesnotexist@test.com",
+        "password": "12345678"
+    })
+    assert response.status_code == 401
