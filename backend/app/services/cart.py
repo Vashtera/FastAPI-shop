@@ -2,7 +2,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from fastapi import HTTPException, status
 from ..cache.redis import RedisCache
 from ..repositories.products_repo import ProductRepo
-from ..schemas.cart import CartCreate, CartItem, CartResponse
+from ..schemas.cart import CartCreate, CartItem, CartResponse, CartItemUpdate
 
 
 class CartService:
@@ -40,60 +40,34 @@ class CartService:
         await self.cache.add(user_id, item.product_id, item.quantity)
     
 
-    def update_cart_item(self, cart_data: dict[int, int], item: CartCreate) -> dict[int, int]:
+    async def update_cart_item(self, user_id: int, item: CartItemUpdate) -> dict:
         """
-        Обновить количество товара в корзине.
-
-        Args:
-            cart_data: текущее состояние корзины
-            item: данные товара с новым количеством
-
-        Returns:
-            Обновлённая корзина
-
-        Raises:
-            HTTPException 404: если товар не найден в корзине
+       
         """
-        if item.product_id not in cart_data:
+        if not item.product_id:
             raise HTTPException(
                 status_code=status.HTTP_404_NOT_FOUND,
                 detail=f"Product with id {item.product_id} not founded"
             )
-        cart_data[item.product_id] = item.quantity
-        return cart_data
+        await self.cache.set(f"cart:{user_id}", item.model_dump())
     
-    def remove_from_cart(self, cart_data: dict[int, int], product_id: int) ->dict[int, int]:
+    def delete_from_cart(self, user_id: int, product_id: int) -> None:
         """
-        Удалить товар из корзины.
-
-        Args:
-            cart_data: текущее состояние корзины
-            product_id: id удаляемого товара
-
-        Returns:
-            Корзина без удалённого товара
-
-        Raises:
-            HTTPException 404: если товар не найден в корзине
+        
         """
-        if product_id not in cart_data:
+        if not product_id:
             raise HTTPException(
                 status_code=status.HTTP_404_NOT_FOUND,
                 detail=f"Product with id {product_id} not founded"
             )
-        del cart_data[product_id]
-        return cart_data
+        await self.cache.delete(user_id, product_id)
     
-    async def get_cart_details(self, cart_data: dict[int, int]) -> CartResponse:
+    async def get_cart_details(self, user_id: int) -> CartResponse:
         """
-        Получить детальную информацию о корзине с ценами и итогами.
-
-        Args:
-            cart_data: текущее состояние корзины
-
-        Returns:
-            CartResponse с полной информацией о товарах, общей суммой и количеством
+        
         """
+        cart_data= await self.cache.get(f"cart:{user_id}")
+
         if not cart_data:
             return CartResponse(items=[], total=0.0, items_count=0)
         

@@ -17,7 +17,6 @@ class Settings(BaseSettings):
     database_url: str 
     redis_url: str
     cache_ttl_seconds: int
-    cache_tasks_key: str
     secret_key: SecretStr
     algorithm: str = "HS256"
     access_token_expires_minutes: int = 30
