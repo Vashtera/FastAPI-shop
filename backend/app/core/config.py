@@ -9,6 +9,7 @@ class Settings(BaseSettings):
     app_name: str = "FastAPI Shop"
     debug: bool = True
     database_url: str 
+    redis_url: str
     secret_key: SecretStr
     algorithm: str = "HS256"
     access_token_expires_minutes: int = 30

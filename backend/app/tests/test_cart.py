@@ -8,7 +8,7 @@ async def test_add_to_cart(client: AsyncClient, sample_product):
     })
     assert response.status_code == 200
 
-# нужно проверить после добавления redis  
+# TODO нужно проверить после добавления redis  
 # async def test_get_cart(client: AsyncClient):
 #    response = await client.get("/api/cart", json={})
 #    assert response.status_code == 200
