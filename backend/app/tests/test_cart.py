@@ -8,7 +8,7 @@ async def test_add_to_cart(client: AsyncClient, sample_product):
     })
     assert response.status_code == 200
 
- 
+
 async def test_get_cart(client: AsyncClient, sample_product):
     await client.post("/users/registration/", json={
         "first_name": "Test",
@@ -22,7 +22,6 @@ async def test_get_cart(client: AsyncClient, sample_product):
         "password": "12345678"
     })
     token = login_response.json()["access_token"]
-    print(f"TOKEN: {token}")
 
     response = await client.get(
         "/api/cart", 
