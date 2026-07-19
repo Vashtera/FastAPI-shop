@@ -10,6 +10,7 @@ class Settings(BaseSettings):
     debug: bool = True
     database_url: str 
     redis_url: str
+    cache_ttl_seconds: int
     secret_key: SecretStr
     algorithm: str = "HS256"
     access_token_expires_minutes: int = 30
