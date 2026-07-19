@@ -1,5 +1,6 @@
 from sqlalchemy.ext.asyncio import AsyncSession
 from fastapi import HTTPException, status
+from ..cache.redis import RedisCache
 from ..repositories.products_repo import ProductRepo
 from ..schemas.cart import CartCreate, CartItem, CartResponse
 
@@ -11,39 +12,32 @@ class CartService:
     - ключ: id продукта
     - значение: количество товара
     """
-    def __init__(self, db: AsyncSession):
+    def __init__(self, 
+                 db: AsyncSession, 
+                 cache_redis_url: str, 
+                 cache_ttl_seconds: int,
+                 cache_tasks_key: str
+                 ):
         self.session = ProductRepo(db)
+        self.cache = RedisCache(cache_redis_url, cache_ttl_seconds=86400)
+        self.cache_tasks_key = cache_tasks_key
 
-
-    async def add_to_cart(self, cart_data: dict[int, int], item: CartCreate) -> dict[int, int]:
+    async def add_to_cart(self, user_id: int, item: CartCreate) -> dict:
         """
-        Добавить товар в корзину.
-        Если товар уже есть — увеличивает количество.
-        Если товара нет — создаёт новую позицию.
-
-        Args:
-            cart_data: текущее состояние корзины
-            item: данные добавляемого товара (id и количество)
-
-        Returns:
-            Обновлённая корзина
-
-        Raises:
-            HTTPException 404: если товар не найден в БД
+        
         """
-        product = await self.session.get_by_id(item.product_id)
+        product_cache = self.cache.get(self.cache_tasks_key) # Проверка наличия в кеше Redis
+        if product_cache is not None:
+            return await product_cache
+        
+        product = await self.session.get_by_id(item.product_id) # Взятие данных из БД если в кеше нету
         if not product:
             raise HTTPException(
                 status_code=status.HTTP_404_NOT_FOUND,
                 detail=f"Product with id {item.product_id} not founded"
             )
 
-        if item.product_id in cart_data:
-            cart_data[item.product_id] += item.quantity
-        else:
-            cart_data[item.product_id] = item.quantity
-
-        return cart_data
+        await self.cache.add(user_id, item.product_id, item.quantity)
     
 
     def update_cart_item(self, cart_data: dict[int, int], item: CartCreate) -> dict[int, int]:
