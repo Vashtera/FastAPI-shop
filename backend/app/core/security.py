@@ -65,7 +65,8 @@ def verify_access_token(token: str) -> str | None:
             algorithms=[settings.algorithm],
             options={"require": ["exp", "sub"]},
         )
-    except InvalidTokenError:
+    except Exception as e:
+        print(f"JWT DECODE ERROR: {type(e).__name__}: {e}")
         return None
     else:
         return payload.get("sub") # sub = User id

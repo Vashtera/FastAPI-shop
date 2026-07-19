@@ -62,5 +62,6 @@ async def get_current_user(
             detail="User not found",
             headers={"WWW-Authenticate": "Bearer"},
         )
+    user_id = verify_access_token(token)
 
     return user
