@@ -141,5 +141,6 @@ function handleClearCart() {
  */
 onMounted(async () => {
   await cartStore.fetchCartDetails()
+  console.log('Cart details:', cartStore.cartDetails)
 })
 </script>

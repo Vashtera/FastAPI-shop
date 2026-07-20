@@ -165,7 +165,7 @@ class CartService:
                 )
 
                 cart_items.append(cart_item)
-                total_price += subtotal
+                total_price += float(subtotal)
                 total_items += quantity
 
         return CartResponse(

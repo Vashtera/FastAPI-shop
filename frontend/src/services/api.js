@@ -77,31 +77,25 @@ export const categoriesAPI = {
  * API методы для работы с корзиной
  */
 export const cartAPI = {
-  addItem(item, cartData) {
-    return apiClient.post('/api/cart/add', {
-      product_id: item.product_id,
-      quantity: item.quantity,
-      cart: cartData,
+  addItem(productId, quantity) {
+    return apiClient.post('/api/cart/add', null, {
+      params: { product_id: productId, quantity: quantity },
     })
   },
-
-  getCart(cartData) {
-    return apiClient.get('/api/cart', { data: cartData })
+ 
+  getCart() {
+    return apiClient.get('/api/cart')
   },
-
-  updateItem(item, cartData) {
-    return apiClient.put('/api/cart/update', {
-      product_id: item.product_id,
-      quantity: item.quantity,
-      cart: cartData,
+ 
+  updateItem(productId, quantity) {
+    return apiClient.put('/api/cart/update', null, {
+      params: { product_id: productId, quantity: quantity },
     })
   },
-
-  removeItem(productId, cartData) {
-    return apiClient.delete(`/api/cart/remove/${productId}`, {
-      data: { cart: cartData },
-    })
+ 
+  removeItem(productId) {
+    return apiClient.delete(`/api/cart/remove/${productId}`)
   },
 }
-
+ 
 export default apiClient
