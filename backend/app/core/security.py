@@ -52,7 +52,7 @@ def create_access_token(data: dict, expires_delta: timedelta | None = None) -> s
 Тут уже обратная работа прошлой функции, оно декодирует токен и сравнирвает данные что мы передали.
 то есть, переменная payload(полезная нагрузка) и объявляем jwt.decode для декодирования
 и передаем 2 нужные и 2 доп атрибута, а именно сам токен, секретный ключ, дальше уже алгоритм
-для декодирования и очень важно для безопастности опции по которым мы проверяем нужные данные так
+для декодирования и очень важно для безопасности опции по которым мы проверяем нужные данные так
 сказать. А именно время жизни токена и субъект(User id). Если же токен не действителен или еще что-то
 то возвращаем None. Если же исключении не было, то возвращаем блок else где получаем sub(User id)
 """
@@ -65,8 +65,7 @@ def verify_access_token(token: str) -> str | None:
             algorithms=[settings.algorithm],
             options={"require": ["exp", "sub"]},
         )
-    except Exception as e:
-        print(f"JWT DECODE ERROR: {type(e).__name__}: {e}")
+    except InvalidTokenError:
         return None
     else:
         return payload.get("sub") # sub = User id

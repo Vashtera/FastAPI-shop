@@ -65,3 +65,12 @@ async def get_current_user(
     user_id = verify_access_token(token)
 
     return user
+
+
+async def get_admin():
+    user = get_current_user()
+    if user["role"] != "admin":
+        raise HTTPException(
+            status_code=status.HTTP_403_FORBIDDEN,
+            detail="User have no rights"
+        )
