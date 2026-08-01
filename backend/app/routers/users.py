@@ -4,8 +4,8 @@ from sqlalchemy.ext.asyncio import AsyncSession
 
 from ..core.security import create_access_token
 from ..schemas.users import Token, UserCreate, UserResponse
-from ..services.user import authenticate_user, register
-from ..services.dependencies import get_session
+from ..services.user import authenticate_user, register, give_seller_role_service
+from ..services.dependencies import get_session, get_admin
 
 
 router = APIRouter(
@@ -59,3 +59,18 @@ async def login(
         )
     access_token = create_access_token(data={"sub": str(user.id)})
     return {"access_token": access_token, "token_type": "bearer"}
+
+
+@router.put("/update_role/", response_model=UserResponse, status_code=status.HTTP_200_OK)
+async def give_seller_role(user_id: int = Depends(get_admin), session: AsyncSession = Depends(get_session)):
+    """
+    Обновление роли у пользователя на продавца
+
+    Args:
+        user_id: идентефикатор пользователя
+        session: асинхронная сессия БД (через Depends)
+        
+    Returns:
+        None
+    """
+    return await give_seller_role_service(user_id, session)

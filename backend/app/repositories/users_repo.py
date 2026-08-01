@@ -76,7 +76,7 @@ class UserRepo:
             await self.session.rollback()
             raise e
         
-    async def give_seller_role(self, user_id: int) -> None:
+    async def give_seller_role_repo(self, user_id: int) -> None:
         stmt = (
             update(User)
             .where(User.id == user_id)
