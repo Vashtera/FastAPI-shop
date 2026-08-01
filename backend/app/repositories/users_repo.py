@@ -76,12 +76,12 @@ class UserRepo:
             await self.session.rollback()
             raise e
         
-    async def give_seller_role_repo(self, user_id: int) -> None:
+    async def give_seller_role_repo(self, user_id: int):
         stmt = (
             update(User)
             .where(User.id == user_id)
             .values(role = "seller")
             )
         await self.session.execute(stmt)
-        await self.session.commit()
-        return None 
+        return await self.session.commit()
+        

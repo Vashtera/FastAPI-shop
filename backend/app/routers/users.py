@@ -1,4 +1,4 @@
-from fastapi import APIRouter, Depends, HTTPException, status
+from fastapi import APIRouter, Depends, HTTPException, status, Query
 from fastapi.security import OAuth2PasswordRequestForm
 from sqlalchemy.ext.asyncio import AsyncSession
 
@@ -61,15 +61,19 @@ async def login(
     return {"access_token": access_token, "token_type": "bearer"}
 
 
-@router.put("/update_role/", response_model=UserResponse, status_code=status.HTTP_200_OK)
-async def give_seller_role(user_id: int = Depends(get_admin), session: AsyncSession = Depends(get_session)):
+@router.put("/update_role/", status_code=status.HTTP_200_OK)
+async def give_seller_role(
+    user_id: int = Query(..., description="ID пользователя"), 
+    session: AsyncSession = Depends(get_session),
+    current_admin: UserResponse = Depends(get_admin)
+    ):
     """
     Обновление роли у пользователя на продавца
 
     Args:
-        user_id: идентефикатор пользователя
+        admin: текущий пользователь (администратор)
         session: асинхронная сессия БД (через Depends)
-        
+
     Returns:
         None
     """

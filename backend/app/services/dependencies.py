@@ -62,14 +62,13 @@ async def get_current_user(
             detail="User not found",
             headers={"WWW-Authenticate": "Bearer"},
         )
-    user_id = verify_access_token(token)
 
     return user
 
 
 async def get_admin(user = Depends(get_current_user)):
    try:
-        if user["role"] != "admin": # тут может вылезти ошибка если get_curret_user вернет User модель
+        if user.role != "admin": # тут может вылезти ошибка если get_curret_user вернет User модель
             raise HTTPException(
                 status_code=status.HTTP_403_FORBIDDEN,
                 detail="User have no rights"
@@ -81,7 +80,7 @@ async def get_admin(user = Depends(get_current_user)):
 
 async def get_seller(user = Depends(get_current_user)):
    try:
-        if user["role"] != "seller": # тут может вылезти ошибка если get_curret_user вернет User модель
+        if user.role != "seller": # тут может вылезти ошибка если get_curret_user вернет User модель
             raise HTTPException(
                 status_code=status.HTTP_403_FORBIDDEN,
                 detail="User have no rights"
