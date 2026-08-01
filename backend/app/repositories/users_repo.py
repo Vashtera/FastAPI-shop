@@ -1,6 +1,6 @@
 from typing import Optional
 
-from sqlalchemy import func, select
+from sqlalchemy import func, select, update
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from ..models.users import User
@@ -75,3 +75,13 @@ class UserRepo:
         except Exception as e:
             await self.session.rollback()
             raise e
+        
+    async def give_seller_role(self, user_id: int) -> None:
+        stmt = (
+            update(User)
+            .where(User.id == user_id)
+            .values(role = "seller")
+            )
+        await self.session.execute(stmt)
+        await self.session.commit()
+        return None 
