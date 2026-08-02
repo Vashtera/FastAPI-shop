@@ -160,21 +160,25 @@ class ProductRepo():
         return result.scalars().all()
     
 
-    async def put_approve_status(self, product_id: int) -> None:
+    async def put_approve_status(self, product_id: int) -> Product | None:
         stmt = (
             update(Product)
             .where(Product.id == product_id)
             .values(status = "approve")
+            .returning(Product)
         )
-        await self.session.execute(stmt)
-        return await self.session.commit()
+        result = await self.session.execute(stmt)
+        await self.session.commit()
+        return result.scalar_one_or_none()
     
 
-    async def put_reject_status(self, product_id: int) -> None:
+    async def put_reject_status(self, product_id: int) -> Product | None:
         stmt = (
             update(Product)
             .where(Product.id == product_id)
             .values(status = "reject")
+            .returning(Product)
         )
-        await self.session.execute(stmt)
-        return await self.session.commit()
+        result = await self.session.execute(stmt)
+        await self.session.commit()
+        return result.scalar_one_or_none()

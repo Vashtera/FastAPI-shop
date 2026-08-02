@@ -61,6 +61,6 @@ async def put_approve_status(
 async def put_reject_status(
     product_id: int, 
     service: prod_service = Depends(get_prod_service),
-    current_admin = Depends(get_admin)
+    current_admin = Depends(get_seller)
     ):
     return await service.put_reject_status(product_id)

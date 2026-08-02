@@ -108,7 +108,7 @@ class ProductService:
                 status_code=status.HTTP_404_NOT_FOUND,
                 detail=f"Product with id {product_id} not founded"
             )
-        return product 
+        return ProductResponse.model_validate(product)
     
 
     async def put_reject_status(self, product_id: int) -> ProductResponse:
@@ -118,4 +118,4 @@ class ProductService:
                 status_code=status.HTTP_404_NOT_FOUND,
                 detail=f"Product with id {product_id} not founded"
             )
-        return product 
+        return ProductResponse.model_validate(product)

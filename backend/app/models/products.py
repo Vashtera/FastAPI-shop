@@ -17,7 +17,7 @@ class Product(Base):
     status: Mapped[str] = mapped_column(String, default="pending")
     # "pending", "approved", "rejected"
 
-    category: Mapped["Category"] = relationship(back_populates="products")
+    category: Mapped["Category"] = relationship(back_populates="products", lazy="selectin")
 
     def __repr__(self) -> str:
         return f"<Product(id={self.id}, name='{self.name}', price={self.price})>"
