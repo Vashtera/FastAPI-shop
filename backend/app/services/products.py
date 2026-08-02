@@ -95,14 +95,9 @@ class ProductService:
         return product
     
 
-    async def get_pending_products(self, product_ids: list[int]) -> ProductListResponse:
-        products = await self.session.get_pending_products(product_ids)
-        if not products:
-            raise HTTPException(
-                status_code=status.HTTP_404_NOT_FOUND,
-                detail=f"Product with id {product_ids} not founded"
-            )
-        products_response = [ProductResponse.model_validate(prod) for prod in products]
+    async def get_pending_products(self) -> ProductListResponse:
+        products = await self.session.get_pending_products()
+        products_response = [ProductResponse.model_validate(prod) for prod in products] if products else []
         return ProductListResponse(products=products_response, total=len(products_response))
     
 

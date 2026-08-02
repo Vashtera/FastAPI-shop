@@ -34,7 +34,7 @@ async def get_products_by_category(category_id: int, service: prod_service = Dep
 async def create_product(
     product_data: ProductCreate,
     service: prod_service = Depends(get_prod_service),
-    current_seller: UserResponse = Depends(get_seller)
+    current_seller = Depends(get_seller)
     ):
     return await service.create_product(product_data)
 
@@ -48,7 +48,7 @@ async def get_pending_products(
     return await service.get_pending_products(product_ids)
 
 
-@router.put("admin/products/{product_id}/approve", response_model=ProductResponse, status_code=status.HTTP_201_CREATED)
+@router.put("/admin/products/{product_id}/approve", response_model=ProductResponse, status_code=status.HTTP_201_CREATED)
 async def put_approve_status(
     product_id: int, 
     service: prod_service = Depends(get_prod_service),
@@ -57,7 +57,7 @@ async def put_approve_status(
     return await service.put_approve_status(product_id)
 
 
-@router.put("admin/products/{product_id}/reject", response_model=ProductResponse, status_code=status.HTTP_201_CREATED)
+@router.put("/admin/products/{product_id}/reject", response_model=ProductResponse, status_code=status.HTTP_201_CREATED)
 async def put_reject_status(
     product_id: int, 
     service: prod_service = Depends(get_prod_service),

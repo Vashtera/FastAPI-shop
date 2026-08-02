@@ -93,6 +93,25 @@ class ProductRepo():
             .where(Product.category_id == category_id and Product.status == "approved")
         )
         return result.scalars().all()
+    
+
+    async def get_by_pending_id(self, id: int) -> Optional[Product]:
+        """
+        Получить товар по ID.
+
+        Args:
+            id: уникальный идентификатор товара
+
+        Returns:
+            Объект Product или None если не найден
+        """
+        result = await self.session.execute(
+            select(Product).where(Product.id == id)
+            .where(Product.status == "pending")
+            .options(joinedload(Product.category))
+        )
+        return result.scalar_one_or_none()
+
 
     async def create_product(self, product_data: ProductCreate) -> Product:
         """
@@ -113,14 +132,14 @@ class ProductRepo():
             await self.session.commit()
             await self.session.refresh(db_product)
             
-            # заново запрашиваем товар с категорией через joinedload
-            return await self.get_by_id(db_product.id)
+            # заново запрашиваем товар с категорией 
+            return await self.get_by_pending_id(db_product.id)
         except Exception as e:
             await self.session.rollback()
             raise e
         
 
-    async def get_pending_products(self, product_ids: list[int]) -> list[Product]:
+    async def get_pending_products(self) -> Product:
         """
         Получить товары со статусом в ожидании
 
@@ -136,7 +155,7 @@ class ProductRepo():
         result = await self.session.execute(
             select(Product)
             .options(joinedload(Product.category))
-            .where(Product.id.in_(product_ids) and Product.status == "pending")
+            .where(Product.status == "pending")
         )
         return result.scalars().all()
     
