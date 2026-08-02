@@ -240,6 +240,8 @@ async function handleCreateProduct() {
 }
 
 .user-card {
+  color: #1d1d1f;
+  margin: 6px 0;
   background: white;
   border-radius: 12px;
   padding: 20px 24px;
@@ -294,6 +296,7 @@ async function handleCreateProduct() {
 }
 
 input, select, textarea {
+  color: #1d1d1f;
   padding: 10px 14px;
   border: 1.5px solid #e8e8ed;
   border-radius: 8px;
