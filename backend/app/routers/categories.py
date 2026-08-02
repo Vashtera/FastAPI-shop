@@ -1,8 +1,9 @@
 from fastapi import APIRouter, Depends, status
 
 from ..services.categories import CategoryService as ctg_service
-from ..services.dependencies import get_session
+from ..services.dependencies import get_session, get_admin
 from ..schemas.categories import CategoryResponse, CategoryCreate
+from ..schemas.users import UserResponse
 
 router = APIRouter(
     prefix='/api/categories',
@@ -27,7 +28,8 @@ async def get_category(category_id: int, service: ctg_service = Depends(get_ctg_
 @router.post("/add", response_model=CategoryResponse, status_code=status.HTTP_201_CREATED)
 async def create_category(
     category_data: CategoryCreate, 
-    service: ctg_service = Depends(get_ctg_service)
+    service: ctg_service = Depends(get_ctg_service),
+    current_admin: UserResponse = Depends(get_admin)
     ):
     return await service.create_category(category_data)
 
