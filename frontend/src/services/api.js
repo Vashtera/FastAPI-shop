@@ -1,7 +1,6 @@
 // frontend/src/services/api.js
 /**
  * API сервис для взаимодействия с backend.
- * Централизует все HTTP запросы к FastAPI серверу.
  */
 
 import axios from 'axios'
@@ -15,7 +14,6 @@ const apiClient = axios.create({
   },
 })
 
-// Интерсептор — добавляет токен к каждому запросу если он есть
 apiClient.interceptors.request.use((config) => {
   const token = localStorage.getItem('access_token')
   if (token) {
@@ -25,7 +23,7 @@ apiClient.interceptors.request.use((config) => {
 })
 
 /**
- * API методы для авторизации
+ * Авторизация и профиль
  */
 export const authAPI = {
   register(userData) {
@@ -33,7 +31,6 @@ export const authAPI = {
   },
 
   login(email, password) {
-    // OAuth2 требует form-data, не JSON
     const formData = new URLSearchParams()
     formData.append('username', email)
     formData.append('password', password)
@@ -41,10 +38,20 @@ export const authAPI = {
       headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
     })
   },
+
+  getMe() {
+    return apiClient.get('/users/me/')
+  },
+
+  updateRole(userId) {
+    return apiClient.put('/users/update_role/', null, {
+      params: { user_id: userId },
+    })
+  },
 }
 
 /**
- * API методы для работы с товарами
+ * Товары
  */
 export const productsAPI = {
   getAll() {
@@ -58,10 +65,26 @@ export const productsAPI = {
   getByCategory(categoryId) {
     return apiClient.get(`/api/products/category/${categoryId}`)
   },
+
+  create(productData) {
+    return apiClient.post('/api/products/add', productData)
+  },
+
+  getPending() {
+    return apiClient.get('/api/products/admin/products/pending')
+  },
+
+  approve(productId) {
+    return apiClient.put(`/api/products/admin/products/${productId}/approve`)
+  },
+
+  reject(productId) {
+    return apiClient.put(`/api/products/admin/products/${productId}/reject`)
+  },
 }
 
 /**
- * API методы для работы с категориями
+ * Категории
  */
 export const categoriesAPI = {
   getAll() {
@@ -71,10 +94,14 @@ export const categoriesAPI = {
   getById(id) {
     return apiClient.get(`/api/categories/${id}`)
   },
+
+  create(categoryData) {
+    return apiClient.post('/api/categories/add', categoryData)
+  },
 }
 
 /**
- * API методы для работы с корзиной
+ * Корзина
  */
 export const cartAPI = {
   addItem(productId, quantity) {
@@ -82,20 +109,20 @@ export const cartAPI = {
       params: { product_id: productId, quantity: quantity },
     })
   },
- 
+
   getCart() {
     return apiClient.get('/api/cart')
   },
- 
+
   updateItem(productId, quantity) {
     return apiClient.put('/api/cart/update', null, {
       params: { product_id: productId, quantity: quantity },
     })
   },
- 
+
   removeItem(productId) {
     return apiClient.delete(`/api/cart/remove/${productId}`)
   },
 }
- 
+
 export default apiClient

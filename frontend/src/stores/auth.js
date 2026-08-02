@@ -1,7 +1,7 @@
 // frontend/src/stores/auth.js
 /**
  * Pinia store для управления авторизацией.
- * Хранит токен в localStorage, предоставляет методы входа/выхода/регистрации.
+ * Хранит токен и данные текущего пользователя (включая роль).
  */
 
 import { defineStore } from 'pinia'
@@ -11,24 +11,36 @@ import { authAPI } from '@/services/api'
 const TOKEN_KEY = 'access_token'
 
 export const useAuthStore = defineStore('auth', () => {
-  // State
   const token = ref(localStorage.getItem(TOKEN_KEY) || null)
+  const user = ref(null)
   const loading = ref(false)
   const error = ref(null)
 
-  // Getters
   const isAuthenticated = computed(() => !!token.value)
+  const role = computed(() => user.value?.role || null)
+  const isAdmin = computed(() => role.value === 'admin')
+  const isSeller = computed(() => role.value === 'seller')
 
-  // Actions
   /**
-   * Регистрация нового пользователя
+   * Получить данные текущего пользователя (включая роль) с сервера
    */
+  async function fetchCurrentUser() {
+    if (!token.value) return
+    try {
+      const response = await authAPI.getMe()
+      user.value = response.data
+    } catch (err) {
+      console.error('Error fetching current user:', err)
+      // токен невалиден — разлогиниваем
+      logout()
+    }
+  }
+
   async function register(userData) {
     loading.value = true
     error.value = null
     try {
       await authAPI.register(userData)
-      // После регистрации сразу логиним
       await login(userData.email, userData.password)
       return true
     } catch (err) {
@@ -39,9 +51,6 @@ export const useAuthStore = defineStore('auth', () => {
     }
   }
 
-  /**
-   * Вход пользователя
-   */
   async function login(email, password) {
     loading.value = true
     error.value = null
@@ -49,6 +58,7 @@ export const useAuthStore = defineStore('auth', () => {
       const response = await authAPI.login(email, password)
       token.value = response.data.access_token
       localStorage.setItem(TOKEN_KEY, token.value)
+      await fetchCurrentUser()
       return true
     } catch (err) {
       error.value = err.response?.data?.detail || 'Invalid email or password'
@@ -58,26 +68,26 @@ export const useAuthStore = defineStore('auth', () => {
     }
   }
 
-  /**
-   * Выход пользователя
-   */
   function logout() {
     token.value = null
+    user.value = null
     localStorage.removeItem(TOKEN_KEY)
   }
 
-  /**
-   * Очистить ошибку
-   */
   function clearError() {
     error.value = null
   }
 
   return {
     token,
+    user,
     loading,
     error,
     isAuthenticated,
+    role,
+    isAdmin,
+    isSeller,
+    fetchCurrentUser,
     register,
     login,
     logout,

@@ -70,6 +70,14 @@
             @click="handleLogout"
             class="text-gray-700 hover:text-black transition-colors font-medium"
           >
+          <router-link
+            v-if="authStore.isAuthenticated"
+            to="/profile"
+            class="nav-link"
+            active-class="text-black font-semibold"
+          >
+            Profile
+          </router-link>
             Sign out
           </button>
 

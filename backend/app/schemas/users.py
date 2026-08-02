@@ -40,6 +40,7 @@ class UserResponse(UserBase):
     """
 
     id: int = Field(description="Уникальный идентификатор пользователя")
+    role: str = Field(description="Роль пользователя - покупатель/продавец/админ")
 
     model_config = ConfigDict(
         from_attributes=True,  # позволяет создавать схему из SQLAlchemy объекта

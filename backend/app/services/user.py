@@ -46,3 +46,8 @@ async def authenticate_user(email: str, password: str, db: AsyncSession):
 async def give_seller_role_service(user_id: int, db: AsyncSession):
     repo = UserRepo(db)
     return await repo.give_seller_role_repo(user_id)
+
+
+async def get_profile_user(user_id: int, db: AsyncSession):
+    repo = UserRepo(db)
+    return await repo.get_by_id(user_id)
