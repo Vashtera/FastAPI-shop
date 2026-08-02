@@ -1,6 +1,6 @@
 from typing import Optional, List
 
-from sqlalchemy import select, func
+from sqlalchemy import select, update
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.orm import joinedload
 
@@ -139,3 +139,13 @@ class ProductRepo():
             .where(Product.id.in_(product_ids) and Product.status == "pending")
         )
         return result.scalars().all()
+    
+    
+    async def put_approve_status(self, product_id: int) -> None:
+        stmt = (
+            update(Product)
+            .where(Product.id == product_id)
+            .values(status = "approve")
+        )
+        await self.session.execute(stmt)
+        return await self.session.commit()

@@ -1,7 +1,7 @@
 from fastapi import APIRouter, Depends, status
 
 from ..services.products import ProductService as prod_service
-from ..services.dependencies import get_session, get_seller
+from ..services.dependencies import get_session, get_seller, get_admin
 from ..schemas.products import ProductListResponse, ProductResponse, ProductCreate
 from ..schemas.users import UserResponse
 
@@ -37,3 +37,12 @@ async def create_product(
     current_seller: UserResponse = Depends(get_seller)
     ):
     return await service.create_product(product_data)
+
+
+@router.get("/admin/products/pending", response_model=ProductListResponse, status_code=status.HTTP_200_OK)
+async def get_pending_products(
+    product_ids: list[int], 
+    service: prod_service = Depends(get_prod_service),
+    current_admin = Depends(get_admin)
+    ):
+    return await service.get_pending_products(product_ids)
