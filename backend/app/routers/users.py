@@ -5,7 +5,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from ..core.security import create_access_token
 from ..schemas.users import Token, UserCreate, UserResponse
 from ..services.user import authenticate_user, register, give_seller_role_service, get_profile_user
-from ..services.dependencies import get_session, get_admin
+from ..services.dependencies import get_session, get_admin, get_current_user
 
 
 router = APIRouter(
@@ -82,7 +82,7 @@ async def give_seller_role(
 
 @router.get("/me/", response_model=UserResponse, status_code=status.HTTP_200_OK)
 async def get_profile(
-    user_id: int = Query(..., description="ID пользователя"), 
+    user_id: int = Depends(get_current_user), 
     session: AsyncSession = Depends(get_session)
     ):
-    return await get_profile_user(user_id, session)
+    return await get_profile_user(user_id.id, session)

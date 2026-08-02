@@ -64,39 +64,40 @@
             </span>
           </router-link>
 
-          <!-- Авторизован: кнопка выхода -->
-          <button
-            v-if="authStore.isAuthenticated"
-            @click="handleLogout"
-            class="text-gray-700 hover:text-black transition-colors font-medium"
-          >
+          <!-- Авторизован: Profile и кнопка выхода -->
+          <template v-if="authStore.isAuthenticated">
+              <router-link
+                to="/profile"
+                class="text-gray-700 hover:text-black transition-colors font-medium"
+                active-class="text-black font-semibold"
+            >
+              Profile
+            </router-link>
+
+            <button
+              @click="handleLogout"
+              class="text-gray-700 hover:text-black transition-colors font-medium"
+            >
+              Sign out
+            </button>
+          </template>
+
+        <!-- Не авторизован: вход и регистрация -->
+        <template v-else>
           <router-link
-            v-if="authStore.isAuthenticated"
-            to="/profile"
-            class="nav-link"
+            to="/login"
+            class="text-gray-700 hover:text-black transition-colors font-medium"
             active-class="text-black font-semibold"
           >
-            Profile
+            Sign in
           </router-link>
-            Sign out
-          </button>
-
-          <!-- Не авторизован: вход и регистрация -->
-          <template v-else>
-            <router-link
-              to="/login"
-              class="text-gray-700 hover:text-black transition-colors font-medium"
-              active-class="text-black font-semibold"
-            >
-              Sign in
-            </router-link>
-            <router-link
-              to="/register"
-              class="bg-black text-white px-4 py-2 font-semibold hover:bg-gray-800 transition-colors"
-            >
-              Register
-            </router-link>
-          </template>
+          <router-link
+            to="/register"
+            class="bg-black text-white px-4 py-2 font-semibold hover:bg-gray-800 transition-colors"
+          >
+            Register
+          </router-link>
+        </template>
 
         </nav>
       </div>

@@ -77,8 +77,10 @@ const form = reactive({
 })
 
 async function handleLogin() {
+  console.log('handleLogin called', form.email, form.password)
   authStore.clearError()
   const success = await authStore.login(form.email, form.password)
+  console.log('login result:', success)
   if (success) {
     router.push({ name: 'home' })
   }
