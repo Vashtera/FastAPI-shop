@@ -1,8 +1,9 @@
 from fastapi import APIRouter, Depends, status
 
 from ..services.products import ProductService as prod_service
-from ..services.dependencies import get_session
+from ..services.dependencies import get_session, get_seller
 from ..schemas.products import ProductListResponse, ProductResponse, ProductCreate
+from ..schemas.users import UserResponse
 
 router = APIRouter(
     prefix='/api/products',
@@ -32,6 +33,7 @@ async def get_products_by_category(category_id: int, service: prod_service = Dep
 @router.post("/add", response_model=ProductResponse, status_code=status.HTTP_201_CREATED)
 async def create_product(
     product_data: ProductCreate,
-    service: prod_service = Depends(get_prod_service)
+    service: prod_service = Depends(get_prod_service),
+    current_seller: UserResponse = Depends(get_seller)
     ):
     return await service.create_product(product_data)
