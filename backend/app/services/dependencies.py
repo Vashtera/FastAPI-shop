@@ -68,23 +68,23 @@ async def get_current_user(
 
 async def get_admin(user = Depends(get_current_user)):
    try:
-        if user.role != "admin": # тут может вылезти ошибка если get_curret_user вернет User модель
+        if user.role != "admin": 
             raise HTTPException(
                 status_code=status.HTTP_403_FORBIDDEN,
                 detail="User have no rights"
             )
         return user
    except Exception as e:
-        raise HTTPException(status_code=500, detail=f"Authorization error: {str(e)}")
+        raise HTTPException(status_code=403, detail=f"Authorization error: {str(e)}")
    
 
 async def get_seller(user = Depends(get_current_user)):
    try:
-        if user.role != "seller": # тут может вылезти ошибка если get_curret_user вернет User модель
+        if user.role != "seller": 
             raise HTTPException(
                 status_code=status.HTTP_403_FORBIDDEN,
                 detail="User have no rights"
             )
         return user
    except Exception as e:
-        raise HTTPException(status_code=500, detail=f"Authorization error: {str(e)}")
+        raise HTTPException(status_code=403, detail=f"Authorization error: {str(e)}")   
