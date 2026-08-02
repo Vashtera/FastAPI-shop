@@ -14,6 +14,8 @@ class Product(Base):
     price: Mapped[float] = mapped_column(DECIMAL, nullable=False)
     created_at: Mapped[datetime] = mapped_column(default=lambda: datetime.now(timezone.utc))
     image_url: Mapped[Optional[str]] = mapped_column(String)
+    status: Mapped[str] = mapped_column(String, default="pending")
+    # "pending", "approved", "rejected"
 
     category: Mapped["Category"] = relationship(back_populates="products")
 
