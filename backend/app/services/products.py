@@ -104,3 +104,23 @@ class ProductService:
             )
         products_response = [ProductResponse.model_validate(prod) for prod in products]
         return ProductListResponse(products=products_response, total=len(products_response))
+    
+
+    async def put_approve_status(self, product_id: int) -> ProductResponse:
+        product = await self.session.put_approve_status(product_id)
+        if not product:
+            raise HTTPException(
+                status_code=status.HTTP_404_NOT_FOUND,
+                detail=f"Product with id {product_id} not founded"
+            )
+        return product 
+    
+
+    async def put_reject_status(self, product_id: int) -> ProductResponse:
+        product = await self.session.put_reject_status(product_id)
+        if not product:
+            raise HTTPException(
+                status_code=status.HTTP_404_NOT_FOUND,
+                detail=f"Product with id {product_id} not founded"
+            )
+        return product 

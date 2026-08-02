@@ -140,12 +140,22 @@ class ProductRepo():
         )
         return result.scalars().all()
     
-    
+
     async def put_approve_status(self, product_id: int) -> None:
         stmt = (
             update(Product)
             .where(Product.id == product_id)
             .values(status = "approve")
+        )
+        await self.session.execute(stmt)
+        return await self.session.commit()
+    
+
+    async def put_reject_status(self, product_id: int) -> None:
+        stmt = (
+            update(Product)
+            .where(Product.id == product_id)
+            .values(status = "reject")
         )
         await self.session.execute(stmt)
         return await self.session.commit()

@@ -46,3 +46,21 @@ async def get_pending_products(
     current_admin = Depends(get_admin)
     ):
     return await service.get_pending_products(product_ids)
+
+
+@router.put("admin/products/{product_id}/approve", response_model=ProductResponse, status_code=status.HTTP_201_CREATED)
+async def put_approve_status(
+    product_id: int, 
+    service: prod_service = Depends(get_prod_service),
+    current_admin = Depends(get_admin)
+    ):
+    return await service.put_approve_status(product_id)
+
+
+@router.put("admin/products/{product_id}/reject", response_model=ProductResponse, status_code=status.HTTP_201_CREATED)
+async def put_reject_status(
+    product_id: int, 
+    service: prod_service = Depends(get_prod_service),
+    current_admin = Depends(get_admin)
+    ):
+    return await service.put_reject_status(product_id)
