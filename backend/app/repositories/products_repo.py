@@ -118,3 +118,24 @@ class ProductRepo():
         except Exception as e:
             await self.session.rollback()
             raise e
+        
+
+    async def get_pending_products(self, product_ids: list[int]) -> list[Product]:
+        """
+        Получить товары со статусом в ожидании
+
+        .in_(product_ids) — SQL-эквивалент "WHERE id IN (1, 2, 3)",
+        возвращает все товары чьи id есть в переданном списке.
+
+        Args:
+            product_ids: список id товаров
+
+        Returns:
+            Список найденных товаров
+        """
+        result = await self.session.execute(
+            select(Product)
+            .options(joinedload(Product.category))
+            .where(Product.id.in_(product_ids) and Product.status == "pending")
+        )
+        return result.scalars().all()
