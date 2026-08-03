@@ -73,7 +73,7 @@ class ProductRepo():
         result = await self.session.execute(
             select(Product)
             .options(joinedload(Product.category))
-            .where(Product.id.in_(product_ids) and Product.status == "approve")
+            .where(Product.id.in_(product_ids), Product.status == "approve")
         )
         return result.scalars().all()
 
@@ -90,7 +90,7 @@ class ProductRepo():
         result = await self.session.execute(
             select(Product)
             .options(joinedload(Product.category))
-            .where(Product.category_id == category_id and Product.status == "approve")
+            .where(Product.category_id == category_id, Product.status == "approve")
         )
         return result.scalars().all()
     
