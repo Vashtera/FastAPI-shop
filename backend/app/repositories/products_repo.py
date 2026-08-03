@@ -21,7 +21,7 @@ class ProductRepo():
         """
         self.session = session
 
-    async def get_all(self) -> List[Product]:
+    async def get_all(self) -> list[Product]:
         """
         Получить список всех товаров вместе с их категориями.
 
@@ -35,12 +35,12 @@ class ProductRepo():
         """
         result = await self.session.execute(
             select(Product)
-            .where(Product.status == "approved")
+            .where(Product.status == "approve")
             .options(joinedload(Product.category))
         )
         return result.scalars().all()
 
-    async def get_by_id(self, id: int) -> Optional[Product]:
+    async def get_by_id(self, product_id: int) -> Optional[Product]:
         """
         Получить товар по ID.
 
@@ -51,8 +51,8 @@ class ProductRepo():
             Объект Product или None если не найден
         """
         result = await self.session.execute(
-            select(Product).where(Product.id == id)
-            .where(Product.status == "approved")
+            select(Product).where(Product.id == product_id)
+            .where(Product.status == "approve")
             .options(joinedload(Product.category))
         )
         return result.scalar_one_or_none()
@@ -73,7 +73,7 @@ class ProductRepo():
         result = await self.session.execute(
             select(Product)
             .options(joinedload(Product.category))
-            .where(Product.id.in_(product_ids) and Product.status == "approved")
+            .where(Product.id.in_(product_ids) and Product.status == "approve")
         )
         return result.scalars().all()
 
@@ -90,7 +90,7 @@ class ProductRepo():
         result = await self.session.execute(
             select(Product)
             .options(joinedload(Product.category))
-            .where(Product.category_id == category_id and Product.status == "approved")
+            .where(Product.category_id == category_id and Product.status == "approve")
         )
         return result.scalars().all()
     
@@ -139,12 +139,10 @@ class ProductRepo():
             raise e
         
 
-    async def get_pending_products(self) -> Product:
+    async def get_pending_products(self) -> list[Product]:
         """
         Получить товары со статусом в ожидании
 
-        .in_(product_ids) — SQL-эквивалент "WHERE id IN (1, 2, 3)",
-        возвращает все товары чьи id есть в переданном списке.
 
         Args:
             product_ids: список id товаров

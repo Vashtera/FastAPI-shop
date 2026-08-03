@@ -16,7 +16,7 @@ class ProductCreate(ProductBase):
 
 
 class ProductResponse(ProductBase):
-    id: int = Field(..., description="ID товава")
+    id: int = Field(..., description="ID товара")
     created_at: datetime = Field(..., description="Время создания товара")
     category: CategoryResponse = Field(..., description="Категория товара")
 

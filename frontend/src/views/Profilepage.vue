@@ -140,7 +140,7 @@ onMounted(async () => {
 async function loadPendingProducts() {
   try {
     const response = await productsAPI.getPending()
-    pendingProducts.value = response.data
+    pendingProducts.value = response.data.products
   } catch (err) {
     console.error('Error loading pending products:', err)
   }
@@ -240,13 +240,20 @@ async function handleCreateProduct() {
 }
 
 .user-card {
-  color: #1d1d1f;
-  margin: 6px 0;
   background: white;
   border-radius: 12px;
   padding: 20px 24px;
   margin-bottom: 24px;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+}
+
+.user-card p {
+  color: #1d1d1f;
+  margin: 6px 0;
+}
+
+.user-card strong {
+  color: #000000;
 }
 
 .role-badge {
@@ -296,13 +303,18 @@ async function handleCreateProduct() {
 }
 
 input, select, textarea {
-  color: #1d1d1f;
   padding: 10px 14px;
   border: 1.5px solid #e8e8ed;
   border-radius: 8px;
   font-size: 14px;
   flex: 1;
   min-width: 140px;
+  color: #1d1d1f;
+}
+
+input::placeholder,
+textarea::placeholder {
+  color: #86868b;
 }
 
 textarea {
@@ -330,7 +342,7 @@ textarea {
 }
 
 .empty {
-  color: #86868b;
+  color: #555555;
   font-size: 14px;
 }
 
@@ -352,9 +364,10 @@ textarea {
 }
 
 .pending-info { flex: 1; }
-.pending-info h4 { font-size: 15px; font-weight: 600; margin-bottom: 4px; }
-.pending-info p { font-size: 13px; color: #86868b; margin: 2px 0; }
+.pending-info h4 { font-size: 15px; font-weight: 600; margin-bottom: 4px; color: #1d1d1f; }
+.pending-info p { font-size: 13px; color: #555555; margin: 2px 0; }
 .pending-info .price { color: #1d1d1f; font-weight: 600; }
+.pending-info .category { color: #555555; }
 
 .pending-actions {
   display: flex;
@@ -364,7 +377,7 @@ textarea {
 
 .hint {
   font-size: 13px;
-  color: #86868b;
+  color: #555555;
   margin-top: 8px;
 }
 </style>

@@ -41,11 +41,10 @@ async def create_product(
 
 @router.get("/admin/products/pending", response_model=ProductListResponse, status_code=status.HTTP_200_OK)
 async def get_pending_products(
-    product_ids: list[int], 
     service: prod_service = Depends(get_prod_service),
     current_admin = Depends(get_admin)
     ):
-    return await service.get_pending_products(product_ids)
+    return await service.get_pending_products()
 
 
 @router.put("/admin/products/{product_id}/approve", response_model=ProductResponse, status_code=status.HTTP_201_CREATED)

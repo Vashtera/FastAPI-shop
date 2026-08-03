@@ -97,7 +97,7 @@ class ProductService:
 
     async def get_pending_products(self) -> ProductListResponse:
         products = await self.session.get_pending_products()
-        products_response = [ProductResponse.model_validate(prod) for prod in products] if products else []
+        products_response = [ProductResponse.model_validate(prod) for prod in products]
         return ProductListResponse(products=products_response, total=len(products_response))
     
 
