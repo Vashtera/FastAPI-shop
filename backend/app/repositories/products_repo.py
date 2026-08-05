@@ -33,11 +33,12 @@ class ProductRepo():
         Returns:
             Список всех товаров
         """
-        result = await self.session.execute(
+        stmt = (
             select(Product)
             .where(Product.status == "approve")
-            .options(joinedload(Product.category))
+            .options(joinedload(Product.categories))
         )
+        result = await self.session.execute(stmt)
         return result.scalars().all()
 
     async def get_by_id(self, product_id: int) -> Optional[Product]:
@@ -50,11 +51,12 @@ class ProductRepo():
         Returns:
             Объект Product или None если не найден
         """
-        result = await self.session.execute(
+        stmt = (
             select(Product).where(Product.id == product_id)
             .where(Product.status == "approve")
-            .options(joinedload(Product.category))
+            .options(joinedload(Product.categories))
         )
+        result = await self.session.execute(stmt)
         return result.scalar_one_or_none()
 
     async def get_multiple_by_ids(self, product_ids: list[int]) -> list[Product]:
@@ -70,11 +72,12 @@ class ProductRepo():
         Returns:
             Список найденных товаров
         """
-        result = await self.session.execute(
+        stmt = (
             select(Product)
-            .options(joinedload(Product.category))
+            .options(joinedload(Product.categories))
             .where(Product.id.in_(product_ids), Product.status == "approve")
         )
+        result = await self.session.execute(stmt)
         return result.scalars().all()
 
     async def get_by_category_id(self, category_id: int) -> List[Product]:
@@ -87,11 +90,12 @@ class ProductRepo():
         Returns:
             Список товаров категории
         """
-        result = await self.session.execute(
+        stmt = (
             select(Product)
-            .options(joinedload(Product.category))
+            .options(joinedload(Product.categories))
             .where(Product.category_id == category_id, Product.status == "approve")
         )
+        result = await self.session.execute(stmt)
         return result.scalars().all()
     
 
@@ -105,11 +109,12 @@ class ProductRepo():
         Returns:
             Объект Product или None если не найден
         """
-        result = await self.session.execute(
+        stmt = (
             select(Product).where(Product.id == id)
             .where(Product.status == "pending")
-            .options(joinedload(Product.category))
+            .options(joinedload(Product.categories))
         )
+        result = await self.session.execute(stmt)
         return result.scalar_one_or_none()
 
 
@@ -132,7 +137,7 @@ class ProductRepo():
             await self.session.commit()
             await self.session.refresh(db_product)
             
-            # заново запрашиваем товар с категорией 
+            # заново запрашиваем товар с категорией которые в ожидании
             return await self.get_by_pending_id(db_product.id)
         except Exception as e:
             await self.session.rollback()
@@ -150,11 +155,12 @@ class ProductRepo():
         Returns:
             Список найденных товаров
         """
-        result = await self.session.execute(
+        stmt = (
             select(Product)
-            .options(joinedload(Product.category))
+            .options(joinedload(Product.categories))
             .where(Product.status == "pending")
-        )
+            )
+        result = await self.session.execute(stmt)
         return result.scalars().all()
     
 
