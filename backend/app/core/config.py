@@ -23,6 +23,7 @@ class Settings(BaseSettings):
     model_config = SettingsConfigDict(
         env_file=BASE_DIR / ".env",
         env_file_encoding="utf-8",
+        extra="ignore", 
     )
     cors_origins: Union[List[str], str] = [
         "http://localhost:5173",
