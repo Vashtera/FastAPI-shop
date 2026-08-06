@@ -7,31 +7,25 @@ from ..models.categories import Category
 from ..schemas.categories import CategoryCreate
 
 
-class CategoryRepo():
+class CategoryRepo:
     def __init__(self, session: AsyncSession):
         self.session = session
 
     async def get_all(self) -> list[Category]:
-        stmt = (
-            select(Category)
-            )
+        stmt = select(Category)
         result = await self.session.execute(stmt)
-        return result.scalars().all() 
-    
+        return result.scalars().all()
+
     async def get_by_id(self, id: int) -> Optional[Category]:
-        stmt = (
-            select(Category).where(Category.id == id)
-            )
+        stmt = select(Category).where(Category.id == id)
         result = await self.session.execute(stmt)
         return result.scalar_one_or_none()
-    
+
     async def get_by_slug(self, slug: str) -> Optional[Category]:
-        stmt = (
-            select(Category).where(Category.slug == slug)
-        )
+        stmt = select(Category).where(Category.slug == slug)
         result = await self.session.execute(stmt)
         return result.scalar_one_or_none()
-    
+
     async def create_category(self, category_data: CategoryCreate) -> Category:
         try:
             db_category = Category(**category_data.model_dump())

@@ -7,8 +7,12 @@ class UserBase(BaseModel):
     Содержит общие поля которые используются в других схемах.
     """
 
-    first_name: str = Field(..., min_length=2, description="Имя пользователя, минимум 2 символа")
-    last_name: str = Field(..., min_length=2, description="Фамилия пользователя, минимум 2 символа")
+    first_name: str = Field(
+        ..., min_length=2, description="Имя пользователя, минимум 2 символа"
+    )
+    last_name: str = Field(
+        ..., min_length=2, description="Фамилия пользователя, минимум 2 символа"
+    )
 
 
 class UserCreate(UserBase):
@@ -17,20 +21,19 @@ class UserCreate(UserBase):
     Наследует поля от UserBase и добавляет поле пароля.
     Используется при регистрации.
     """
-    
+
     email: EmailStr = Field(..., description="Email пользователя")
     password: str = Field(..., description="Введите свой пароль от 8 символов")
-    
+
     @field_validator("password")
     @classmethod
     def validate_password(cls, value: str) -> str:
-
         """Проверяет что пароль содержит минимум 8 символов."""
 
         if len(value) < 8:
             raise ValueError("Слишком короткий пароль, минимум 8 символов")
         return value
-    
+
 
 class UserResponse(UserBase):
     """
@@ -45,6 +48,7 @@ class UserResponse(UserBase):
     model_config = ConfigDict(
         from_attributes=True,  # позволяет создавать схему из SQLAlchemy объекта
     )
+
 
 class Token(BaseModel):
     access_token: str

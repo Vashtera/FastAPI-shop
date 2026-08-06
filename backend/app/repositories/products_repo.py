@@ -8,7 +8,7 @@ from ..models.products import Product
 from ..schemas.products import ProductCreate
 
 
-class ProductRepo():
+class ProductRepo:
     """
     Репозиторий для работы с таблицей product.
     Содержит все запросы к БД связанные с товарами.
@@ -52,7 +52,8 @@ class ProductRepo():
             Объект Product или None если не найден
         """
         stmt = (
-            select(Product).where(Product.id == product_id)
+            select(Product)
+            .where(Product.id == product_id)
             .where(Product.status == "approve")
             .options(joinedload(Product.categories))
         )
@@ -97,7 +98,6 @@ class ProductRepo():
         )
         result = await self.session.execute(stmt)
         return result.scalars().all()
-    
 
     async def get_by_pending_id(self, id: int) -> Optional[Product]:
         """
@@ -110,13 +110,13 @@ class ProductRepo():
             Объект Product или None если не найден
         """
         stmt = (
-            select(Product).where(Product.id == id)
+            select(Product)
+            .where(Product.id == id)
             .where(Product.status == "pending")
             .options(joinedload(Product.categories))
         )
         result = await self.session.execute(stmt)
         return result.scalar_one_or_none()
-
 
     async def create_product(self, product_data: ProductCreate) -> Product:
         """
@@ -136,13 +136,12 @@ class ProductRepo():
             self.session.add(db_product)
             await self.session.commit()
             await self.session.refresh(db_product)
-            
+
             # заново запрашиваем товар с категорией которые в ожидании
             return await self.get_by_pending_id(db_product.id)
         except Exception as e:
             await self.session.rollback()
             raise e
-        
 
     async def get_pending_products(self) -> list[Product]:
         """
@@ -159,28 +158,26 @@ class ProductRepo():
             select(Product)
             .options(joinedload(Product.categories))
             .where(Product.status == "pending")
-            )
+        )
         result = await self.session.execute(stmt)
         return result.scalars().all()
-    
 
     async def put_approve_status(self, product_id: int) -> Product | None:
         stmt = (
             update(Product)
             .where(Product.id == product_id)
-            .values(status = "approve")
+            .values(status="approve")
             .returning(Product)
         )
         result = await self.session.execute(stmt)
         await self.session.commit()
         return result.scalar_one_or_none()
-    
 
     async def put_reject_status(self, product_id: int) -> Product | None:
         stmt = (
             update(Product)
             .where(Product.id == product_id)
-            .values(status = "reject")
+            .values(status="reject")
             .returning(Product)
         )
         result = await self.session.execute(stmt)

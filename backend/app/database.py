@@ -4,9 +4,7 @@ from .core.config import settings
 
 engine = create_async_engine(settings.database_url)
 SessionLocal = async_sessionmaker(
-    bind=engine,
-    class_=AsyncSession,
-    expire_on_commit=False
+    bind=engine, class_=AsyncSession, expire_on_commit=False
 )
 
 
@@ -15,7 +13,7 @@ class Base(DeclarativeBase):
 
 
 async def init_db():
-    from app.models.users import User 
+    from app.models.users import User
     from app.models.categories import Category
     from app.models.products import Product
 

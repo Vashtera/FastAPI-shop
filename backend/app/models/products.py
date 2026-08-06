@@ -4,6 +4,7 @@ from sqlalchemy import String, ForeignKey, Text, DECIMAL, Date
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 from ..database import Base
 
+
 class Product(Base):
     __tablename__ = "product"
 
@@ -12,12 +13,16 @@ class Product(Base):
     name: Mapped[str] = mapped_column(String(128), nullable=False, index=True)
     description: Mapped[Optional[str]] = mapped_column(Text)
     price: Mapped[float] = mapped_column(DECIMAL, nullable=False)
-    created_at: Mapped[datetime] = mapped_column(default=lambda: datetime.now(timezone.utc))
+    created_at: Mapped[datetime] = mapped_column(
+        default=lambda: datetime.now(timezone.utc)
+    )
     image_url: Mapped[Optional[str]] = mapped_column(String)
     status: Mapped[str] = mapped_column(String, default="pending")
-    # "pending", "approved", "rejected"
+    # "pending", "approve", "reject"
 
-    categories: Mapped["category"] = relationship(back_populates="products", lazy="selectin")
+    category: Mapped["Category"] = relationship(
+    back_populates="products", lazy="selectin"
+)
 
     def __repr__(self) -> str:
         return f"<Product(id={self.id}, name='{self.name}', price={self.price})>"

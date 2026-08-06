@@ -15,12 +15,15 @@ async def test_register(client: AsyncClient):
     # json={...} — тело запроса, автоматически сериализуется в JSON
     # и отправляется с заголовком Content-Type: application/json.
     # await обязателен — .post() асинхронная операция, ждём ответ сервера.
-    response = await client.post("/users/registration/", json={
-        "first_name": "Raul",
-        "last_name": "Aitbayev",
-        "email": "raul@test.com",
-        "password": "12345678"
-    })
+    response = await client.post(
+        "/users/registration/",
+        json={
+            "first_name": "Raul",
+            "last_name": "Aitbayev",
+            "email": "raul@test.com",
+            "password": "12345678",
+        },
+    )
 
     # response.status_code — числовой HTTP-код ответа.
     # 200 значит запрос обработан без ошибок на уровне сервера.
@@ -52,25 +55,27 @@ async def test_login(client: AsyncClient):
     # email отличается от того что в test_register (raul2 вместо raul),
     # чтобы не столкнуться с ошибкой "email уже занят" —
     # тестовая БД общая в рамках одной сессии pytest.
-    await client.post("/users/registration/", json={
-        "first_name": "Raul",
-        "last_name": "Aitbayev",
-        "email": "raul2@test.com",
-        "password": "12345678"
-    })
+    await client.post(
+        "/users/registration/",
+        json={
+            "first_name": "Raul",
+            "last_name": "Aitbayev",
+            "email": "raul2@test.com",
+            "password": "12345678",
+        },
+    )
 
     # Роут /users/login/ использует OAuth2PasswordRequestForm — это
     # стандарт OAuth2, он ожидает данные в формате form-data
     # (application/x-www-form-urlencoded), а НЕ json.
     # Поэтому здесь data=, а не json=, как в регистрации.
-    
+
     # Поле называется именно "username", а не "email" —
     # это фиксированное требование OAuth2PasswordRequestForm,
     # даже если по факту логинимся через email.
-    response = await client.post("/users/login/", data={
-        "username": "raul2@test.com",
-        "password": "12345678"
-    })
+    response = await client.post(
+        "/users/login/", data={"username": "raul2@test.com", "password": "12345678"}
+    )
 
     # Проверяем что вход прошёл успешно.
     assert response.status_code == 200
@@ -80,7 +85,7 @@ async def test_login(client: AsyncClient):
     # одинаковым между запусками, поэтому сравнивать с конкретным
     # значением бессмысленно (assert response.json()["access_token"] == "..."
     # никогда бы не сработал).
-    
+
     # Вместо этого проверяем сам факт наличия ключа в ответе —
     # оператор "in" для словаря проверяет присутствие ключа,
     # не заглядывая в его значение.
@@ -88,93 +93,112 @@ async def test_login(client: AsyncClient):
 
 
 async def test_registration_exist_user(client: AsyncClient):
-    await client.post("/users/registration/", json={
-        "first_name": "Raul",
-        "last_name": "Aitbayev",
-        "email": "raul10@test.com",
-        "password": "12345678"
-    })
+    await client.post(
+        "/users/registration/",
+        json={
+            "first_name": "Raul",
+            "last_name": "Aitbayev",
+            "email": "raul10@test.com",
+            "password": "12345678",
+        },
+    )
 
-    response = await client.post("/users/registration/", json={
-        "first_name": "aul",
-        "last_name": "itbayev",
-        "email": "raul10@test.com",
-        "password": "123456780"
-    })
+    response = await client.post(
+        "/users/registration/",
+        json={
+            "first_name": "aul",
+            "last_name": "itbayev",
+            "email": "raul10@test.com",
+            "password": "123456780",
+        },
+    )
     assert response.status_code == 400
 
 
 async def test_login_with_wrong_password(client: AsyncClient):
-    await client.post("/users/registration/", json={
-        "first_name": "Raul",
-        "last_name": "Aitbayev",
-        "email": "raul2@test.com",
-        "password": "12345678"
-    })
+    await client.post(
+        "/users/registration/",
+        json={
+            "first_name": "Raul",
+            "last_name": "Aitbayev",
+            "email": "raul2@test.com",
+            "password": "12345678",
+        },
+    )
 
-    response = await client.post("/users/login/", data={
-        "username": "raul2@test.com",
-        "password": "12345679"
-    })
+    response = await client.post(
+        "/users/login/", data={"username": "raul2@test.com", "password": "12345679"}
+    )
     assert response.status_code == 401
 
 
 async def test_login_with_unexist_email(client: AsyncClient):
-    await client.post("/users/registration/", json={
-        "first_name": "Raul",
-        "last_name": "Aitbayev",
-        "email": "raul2@test.com",
-        "password": "12345678"
-    })
+    await client.post(
+        "/users/registration/",
+        json={
+            "first_name": "Raul",
+            "last_name": "Aitbayev",
+            "email": "raul2@test.com",
+            "password": "12345678",
+        },
+    )
 
-    response = await client.post("/users/login/", data={
-        "username": "raul3@test.com",
-        "password": "12345678"
-    })
+    response = await client.post(
+        "/users/login/", data={"username": "raul3@test.com", "password": "12345678"}
+    )
     assert response.status_code == 401
 
 
 async def test_registration_with_small_password(client: AsyncClient):
-    response = await client.post("/users/registration/", json={
-        "first_name": "Raul",
-        "last_name": "Aitbayev",
-        "email": "raul4@test.com",
-        "password": "1234567"
-    })
+    response = await client.post(
+        "/users/registration/",
+        json={
+            "first_name": "Raul",
+            "last_name": "Aitbayev",
+            "email": "raul4@test.com",
+            "password": "1234567",
+        },
+    )
     assert response.status_code == 422
 
 
 async def test_login_success(client: AsyncClient):
-    await client.post("/users/registration/", json={
-        "first_name": "Test",
-        "last_name": "User",
-        "email": "login_test@test.com",
-        "password": "12345678"
-    })
-    response = await client.post("/users/login/", data={
-        "username": "login_test@test.com",
-        "password": "12345678"
-    })
+    await client.post(
+        "/users/registration/",
+        json={
+            "first_name": "Test",
+            "last_name": "User",
+            "email": "login_test@test.com",
+            "password": "12345678",
+        },
+    )
+    response = await client.post(
+        "/users/login/",
+        data={"username": "login_test@test.com", "password": "12345678"},
+    )
     assert response.status_code == 200
 
 
 async def test_login_wrong_password(client: AsyncClient):
-    await client.post("/users/registration/", json={
-        "first_name": "Test",
-        "last_name": "User",
-        "email": "wrongpass@test.com",
-        "password": "12345678"
-    })
-    response = await client.post("/users/login/", data={
-        "username": "wrongpass@test.com",
-        "password": "wrongpassword"
-    })
+    await client.post(
+        "/users/registration/",
+        json={
+            "first_name": "Test",
+            "last_name": "User",
+            "email": "wrongpass@test.com",
+            "password": "12345678",
+        },
+    )
+    response = await client.post(
+        "/users/login/",
+        data={"username": "wrongpass@test.com", "password": "wrongpassword"},
+    )
     assert response.status_code == 401
 
 
 async def test_login_nonexistent_user(client: AsyncClient):
-    response = await client.post("/users/login/", data={
-        "username": "doesnotexist@test.com",
-        "password": "12345678"
-    })
+    response = await client.post(
+        "/users/login/",
+        data={"username": "doesnotexist@test.com", "password": "12345678"},
+    )
     assert response.status_code == 401

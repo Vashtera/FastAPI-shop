@@ -3,18 +3,17 @@ from pydantic import SecretStr
 from pydantic_settings import BaseSettings, SettingsConfigDict
 from typing import List, Union
 
-
-'''
+"""
 Это путь к корневой папке backend проекта, вычисленный автоматически 
 независимо от того, откуда запускаешь скрипт.
-'''
+"""
 BASE_DIR = Path(__file__).resolve().parent.parent.parent
 
 
 class Settings(BaseSettings):
     app_name: str = "FastAPI Shop"
     debug: bool = True
-    database_url: str 
+    database_url: str
     redis_url: str
     cache_ttl_seconds: int
     secret_key: SecretStr
@@ -23,7 +22,7 @@ class Settings(BaseSettings):
     model_config = SettingsConfigDict(
         env_file=BASE_DIR / ".env",
         env_file_encoding="utf-8",
-        extra="ignore", 
+        extra="ignore",
     )
     cors_origins: Union[List[str], str] = [
         "http://localhost:5173",
@@ -35,4 +34,4 @@ class Settings(BaseSettings):
     images_dir: str = "static/images"
 
 
-settings = Settings() # type: ignore[call-arg] # Загружаются из .env файла
+settings = Settings()  # type: ignore[call-arg] # Загружаются из .env файла

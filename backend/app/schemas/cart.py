@@ -18,9 +18,7 @@ class CartItemUpdate(CartBase):
 class CartItem(CartBase):
     name: str = Field(..., description="Имя товара в корзине")
     price: float = Field(..., description="Цена товара в корзине")
-    subtotal: float = Field(
-        ..., description="Цена за этот товар(цена * количество)"
-        )
+    subtotal: float = Field(..., description="Цена за этот товар(цена * количество)")
     image_url: Optional[str] = Field(None, description="URL изображения товара")
 
 

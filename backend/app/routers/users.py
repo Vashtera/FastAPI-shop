@@ -4,14 +4,15 @@ from sqlalchemy.ext.asyncio import AsyncSession
 
 from ..core.security import create_access_token
 from ..schemas.users import Token, UserCreate, UserResponse
-from ..services.user import authenticate_user, register, give_seller_role_service, get_profile_user
+from ..services.user import (
+    authenticate_user,
+    register,
+    give_seller_role_service,
+    get_profile_user,
+)
 from ..services.dependencies import get_session, get_admin, get_current_user
 
-
-router = APIRouter(
-    prefix="/users", 
-    tags=["users"]
-)
+router = APIRouter(prefix="/users", tags=["users"])
 
 
 @router.post("/registration/", response_model=UserResponse)
@@ -63,10 +64,10 @@ async def login(
 
 @router.put("/update_role/", status_code=status.HTTP_200_OK)
 async def give_seller_role(
-    user_id: int = Query(..., description="ID пользователя"), 
+    user_id: int = Query(..., description="ID пользователя"),
     session: AsyncSession = Depends(get_session),
-    current_admin: UserResponse = Depends(get_admin)
-    ):
+    current_admin: UserResponse = Depends(get_admin),
+):
     """
     Обновление роли у пользователя на продавца
 
@@ -82,7 +83,7 @@ async def give_seller_role(
 
 @router.get("/me/", response_model=UserResponse, status_code=status.HTTP_200_OK)
 async def get_profile(
-    user_id: int = Depends(get_current_user), 
-    session: AsyncSession = Depends(get_session)
-    ):
+    user_id: int = Depends(get_current_user),
+    session: AsyncSession = Depends(get_session),
+):
     return await get_profile_user(user_id.id, session)

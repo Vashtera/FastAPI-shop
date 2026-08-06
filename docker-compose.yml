@@ -3,8 +3,7 @@ version: "3.9"
 services:
   backend:
     build: ./backend
-    ports:
-      - "8000:8000"
+    # ports: - "8000:8000" # Можно закомментировать, если доступ только через nginx
     env_file:
       - backend/.env
     depends_on:
@@ -12,6 +11,8 @@ services:
         condition: service_healthy
       redis:
         condition: service_started
+    networks:
+      - fashop_network
 
   frontend:
     build:
@@ -41,7 +42,8 @@ services:
       - "443:443"
     environment:
       - DOMAIN=${DOMAIN}
-    command: /bin/sh -c "envsubst '$${DOMAIN}' < /etc/nginx/nginx.conf.template > /etc/nginx/nginx.conf && nginx -g 'daemon off;'"
+    # Используем одинарные кавычки для DOMAIN в envsubst, чтобы избежать конфликтов
+    command: /bin/sh -c "envsubst '$$DOMAIN' < /etc/nginx/nginx.conf.template > /etc/nginx/nginx.conf && nginx -g 'daemon off;'"
     depends_on:
       - backend
       - frontend
@@ -53,14 +55,23 @@ services:
     image: postgres:16
     env_file:
       - backend/.env
+    # Добавляем переменные явно, чтобы healthcheck их видел
+    environment:
+      - POSTGRES_USER=${POSTGRES_USER:-postgres}
+      - POSTGRES_DB=${POSTGRES_DB:-postgres}
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD:-password}
     healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U $POSTGRES_USER -d $POSTGRES_DB"]
+      test: ["CMD-SHELL", "pg_isready -U $$POSTGRES_USER -d $$POSTGRES_DB"]
       interval: 5s
       timeout: 5s
       retries: 5
+    networks:
+      - fashop_network
 
   redis:
     image: redis:7
+    networks:
+      - fashop_network
 
   certbot:
     image: certbot/certbot

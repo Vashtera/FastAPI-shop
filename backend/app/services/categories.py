@@ -8,6 +8,7 @@ class CategoryService:
     """
     Сервис для управления категориями товаров.
     """
+
     def __init__(self, db: AsyncSession):
         self.session = CategoryRepo(db)
 
@@ -19,7 +20,7 @@ class CategoryService:
             Список всех категорий
         """
         return await self.session.get_all()
-    
+
     async def get_by_category_id(self, category_id: int) -> CategoryResponse:
         """
         Получить категорию по ID.
@@ -37,10 +38,10 @@ class CategoryService:
         if not category:
             raise HTTPException(
                 status_code=status.HTTP_404_NOT_FOUND,
-                detail=f"Category with id {category_id} not founded"
+                detail=f"Category with id {category_id} not founded",
             )
-        return category 
-    
+        return category
+
     async def create_category(self, category_data: CategoryCreate) -> CategoryResponse:
         """
         Создать новую категорию.
@@ -52,4 +53,4 @@ class CategoryService:
             Созданная категория
         """
         category = await self.session.create_category(category_data)
-        return category 
+        return category

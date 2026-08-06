@@ -44,7 +44,7 @@ async def get_current_user(
             detail="Invalid or expired token",
             headers={"WWW-Authenticate": "Bearer"},
         )
-    
+
     try:
         user_id_int = int(user_id)
     except (TypeError, ValueError):
@@ -66,25 +66,23 @@ async def get_current_user(
     return user
 
 
-async def get_admin(user = Depends(get_current_user)):
-   try:
-        if user.role != "admin": 
+async def get_admin(user=Depends(get_current_user)):
+    try:
+        if user.role != "admin":
             raise HTTPException(
-                status_code=status.HTTP_403_FORBIDDEN,
-                detail="User have no rights"
+                status_code=status.HTTP_403_FORBIDDEN, detail="User have no rights"
             )
         return user
-   except Exception as e:
+    except Exception as e:
         raise HTTPException(status_code=403, detail=f"Authorization error: {str(e)}")
-   
 
-async def get_seller(user = Depends(get_current_user)):
-   try:
-        if user.role != "seller": 
+
+async def get_seller(user=Depends(get_current_user)):
+    try:
+        if user.role != "seller":
             raise HTTPException(
-                status_code=status.HTTP_403_FORBIDDEN,
-                detail="User have no rights"
+                status_code=status.HTTP_403_FORBIDDEN, detail="User have no rights"
             )
         return user
-   except Exception as e:
-        raise HTTPException(status_code=403, detail=f"Authorization error: {str(e)}")   
+    except Exception as e:
+        raise HTTPException(status_code=403, detail=f"Authorization error: {str(e)}")

@@ -28,11 +28,9 @@ class UserRepo:
             user_id: уникальный идентификатор пользователя
 
         Returns:
-            Объект User или None 
+            Объект User или None
         """
-        stmt = (
-            select(User).where(User.id == user_id)
-        )
+        stmt = select(User).where(User.id == user_id)
         result = await self.session.execute(stmt)
         return result.scalar_one_or_none()
 
@@ -46,14 +44,13 @@ class UserRepo:
         Returns:
             Объект User или None
         """
-        stmt = (
-            select(User).where(func.lower(User.email) == email.lower())
-        )
+        stmt = select(User).where(func.lower(User.email) == email.lower())
         result = await self.session.execute(stmt)
         return result.scalar_one_or_none()
 
     async def create_user(self, user_data: UserCreate) -> User:
         from app.core.security import hash_password
+
         data = user_data.model_dump()
         data["hashed_password"] = hash_password(data.pop("password"))
         """
@@ -77,13 +74,8 @@ class UserRepo:
         except Exception as e:
             await self.session.rollback()
             raise e
-        
+
     async def give_seller_role_repo(self, user_id: int):
-        stmt = (
-            update(User)
-            .where(User.id == user_id)
-            .values(role = "seller")
-            )
+        stmt = update(User).where(User.id == user_id).values(role="seller")
         await self.session.execute(stmt)
         return await self.session.commit()
-        

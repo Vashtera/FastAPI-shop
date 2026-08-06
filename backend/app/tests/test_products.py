@@ -1,5 +1,6 @@
 from httpx import AsyncClient
 
+
 async def test_get_all_products(client: AsyncClient, sample_product):
     response = await client.get("api/products")
     assert response.status_code == 200
@@ -19,12 +20,9 @@ async def test_get_product_by_category(client: AsyncClient, sample_product):
 
 
 async def test_create_product(client: AsyncClient, sample_product):
-    response = await client.post("api/products/add", json={
-        "name": "Test1",
-        "price": 76.1,
-        "category_id": 2
-    }
+    response = await client.post(
+        "api/products/add", json={"name": "Test1", "price": 76.1, "category_id": 2}
     )
     print(response.json())
     assert response.status_code == 404
-    assert response.json()  
+    assert response.json()

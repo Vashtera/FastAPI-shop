@@ -86,9 +86,7 @@ allow_headers     — какие заголовки запроса разреш�
 фронтенда к бэкенду с ошибкой CORS policy.
 """
 
-app.mount(
-    "/static", StaticFiles(directory=settings.static_dir), name="static"
-)
+app.mount("/static", StaticFiles(directory=settings.static_dir), name="static")
 """
 Подключает раздачу статических файлов (изображений, например) —
 всё что лежит в папке settings.static_dir будет

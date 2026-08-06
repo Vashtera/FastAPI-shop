@@ -136,8 +136,7 @@ class CartService:
         # изначально передавались int — здесь конвертируем обратно,
         # иначе product_id не совпадёт с id из PostgreSQL (int).
         cart_data = {
-            int(product_id): int(quantity)
-            for product_id, quantity in cart_data.items()
+            int(product_id): int(quantity) for product_id, quantity in cart_data.items()
         }
 
         product_ids = list(cart_data.keys())
