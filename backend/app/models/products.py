@@ -1,6 +1,6 @@
 from datetime import datetime, timezone
 from typing import Optional
-from sqlalchemy import String, ForeignKey, Text, DECIMAL, Date
+from sqlalchemy import String, ForeignKey, Text, DECIMAL
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 from ..database import Base
 
@@ -22,7 +22,7 @@ class Product(Base):
 
     category: Mapped["Category"] = relationship(
     back_populates="products", lazy="selectin"
-)
+    )
 
     def __repr__(self) -> str:
         return f"<Product(id={self.id}, name='{self.name}', price={self.price})>"
