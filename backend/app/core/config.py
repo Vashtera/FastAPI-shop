@@ -1,5 +1,5 @@
 from pathlib import Path
-from typing import List, Union
+from typing import List, Union  # noqa: UP035
 
 from pydantic import SecretStr
 from pydantic_settings import BaseSettings, SettingsConfigDict

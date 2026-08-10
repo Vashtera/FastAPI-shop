@@ -1,14 +1,13 @@
 from fastapi import APIRouter, Depends, status
 
 from ..schemas.products import ProductCreate, ProductListResponse, ProductResponse
-from ..schemas.users import UserResponse
 from ..services.dependencies import get_admin, get_seller, get_session
 from ..services.products import ProductService as prod_service
 
 router = APIRouter(prefix="/api/products", tags=["products"])
 
 
-def get_prod_service(session=Depends(get_session)):
+def get_prod_service(session=Depends(get_session)):  
     return prod_service(session)
 
 
