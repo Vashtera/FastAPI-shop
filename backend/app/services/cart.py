@@ -1,8 +1,9 @@
-from sqlalchemy.ext.asyncio import AsyncSession
 from fastapi import HTTPException, status
+from sqlalchemy.ext.asyncio import AsyncSession
+
 from ..cache.redis import RedisCache
 from ..repositories.products_repo import ProductRepo
-from ..schemas.cart import CartCreate, CartItem, CartResponse, CartItemUpdate
+from ..schemas.cart import CartCreate, CartItem, CartItemUpdate, CartResponse
 
 
 class CartService:

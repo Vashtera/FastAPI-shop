@@ -1,7 +1,8 @@
+from fastapi import HTTPException, status
 from sqlalchemy.ext.asyncio import AsyncSession
+
 from ..repositories.categories_repo import CategoryRepo
 from ..schemas.categories import CategoryCreate, CategoryResponse
-from fastapi import HTTPException, status
 
 
 class CategoryService:

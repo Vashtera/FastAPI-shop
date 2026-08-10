@@ -1,9 +1,9 @@
 from fastapi import HTTPException, status
 from sqlalchemy.ext.asyncio import AsyncSession
 
+from ..core.security import verify_password
 from ..repositories.users_repo import UserRepo
 from ..schemas.users import UserCreate
-from ..core.security import verify_password
 
 
 async def register(user: UserCreate, db: AsyncSession):

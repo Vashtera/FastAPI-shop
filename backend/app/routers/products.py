@@ -1,9 +1,9 @@
 from fastapi import APIRouter, Depends, status
 
-from ..services.products import ProductService as prod_service
-from ..services.dependencies import get_session, get_seller, get_admin
-from ..schemas.products import ProductListResponse, ProductResponse, ProductCreate
+from ..schemas.products import ProductCreate, ProductListResponse, ProductResponse
 from ..schemas.users import UserResponse
+from ..services.dependencies import get_admin, get_seller, get_session
+from ..services.products import ProductService as prod_service
 
 router = APIRouter(prefix="/api/products", tags=["products"])
 

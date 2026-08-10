@@ -1,13 +1,15 @@
 from contextlib import asynccontextmanager
+
 from fastapi import FastAPI
-from app.database import init_db
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.staticfiles import StaticFiles
+
 from app.core.config import settings
-from app.routers.users import router as users_router
+from app.database import init_db
+from app.routers.cart import router as cart_router
 from app.routers.categories import router as categories_router
 from app.routers.products import router as product_router
-from app.routers.cart import router as cart_router
+from app.routers.users import router as users_router
 
 
 @asynccontextmanager

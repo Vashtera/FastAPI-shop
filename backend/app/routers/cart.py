@@ -1,9 +1,9 @@
 from fastapi import APIRouter, Depends, status
 
 from ..core.config import settings
+from ..schemas.cart import CartCreate, CartItemUpdate, CartResponse
 from ..services.cart import CartService
-from ..services.dependencies import get_session, get_current_user
-from ..schemas.cart import CartResponse, CartCreate, CartItemUpdate
+from ..services.dependencies import get_current_user, get_session
 
 router = APIRouter(prefix="/api/cart", tags=["cart"])
 

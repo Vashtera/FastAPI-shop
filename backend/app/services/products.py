@@ -1,8 +1,9 @@
-from sqlalchemy.ext.asyncio import AsyncSession
 from fastapi import HTTPException, status
-from ..repositories.products_repo import ProductRepo
+from sqlalchemy.ext.asyncio import AsyncSession
+
 from ..repositories.categories_repo import CategoryRepo
-from ..schemas.products import ProductCreate, ProductResponse, ProductListResponse
+from ..repositories.products_repo import ProductRepo
+from ..schemas.products import ProductCreate, ProductListResponse, ProductResponse
 
 
 class ProductService:

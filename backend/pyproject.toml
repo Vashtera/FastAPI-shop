@@ -1,10 +1,11 @@
 [project]
-name = "api-shop"
+name = "FastAPI-shop"
 version = "0.1.0"
 description = "My first shop on FastAPI"
 authors = [
     {name = "vashtera",email = "raul.aytbaev@gmail.com"}
 ]
+package-mode = false
 requires-python = ">=3.12"
 dependencies = [
     "fastapi (>=0.138.0,<0.139.0)",
@@ -37,7 +38,8 @@ dev = [
     "httpx (>=0.28.1,<0.29.0)",
     "black (>=26.5.1,<27.0.0)",
     "flake8 (>=7.3.0,<8.0.0)",
-    "isort (>=8.0.1,<9.0.0)"
+    "isort (>=8.0.1,<9.0.0)",
+    "ruff (>=0.16.2,<0.17.0)"
 ]
 
 [tool.pytest.ini_options]

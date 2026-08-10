@@ -1,6 +1,8 @@
-from typing import Optional
 from datetime import datetime
-from pydantic import BaseModel, Field, ConfigDict
+from typing import Optional
+
+from pydantic import BaseModel, ConfigDict, Field
+
 from ..schemas.categories import CategoryResponse
 
 

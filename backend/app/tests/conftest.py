@@ -5,12 +5,12 @@ os.environ["REDIS_URL"] = "redis://localhost:6379/0"
 os.environ["SECRET_KEY"] = "test-secret-key-for-testing-only"
 
 import pytest
-from httpx import AsyncClient, ASGITransport
-from sqlalchemy.ext.asyncio import create_async_engine, async_sessionmaker, AsyncSession
+from httpx import ASGITransport, AsyncClient
+from sqlalchemy.ext.asyncio import AsyncSession, async_sessionmaker, create_async_engine
 from sqlalchemy.pool import NullPool
 
-from app.main import app
 from app.database import Base
+from app.main import app
 from app.services.dependencies import get_session
 
 """
@@ -138,8 +138,9 @@ async def clean_database(db_session):
         производится очистка базы данных.
     """
     from sqlalchemy import delete
-    from app.models.products import Product
+
     from app.models.categories import Category
+    from app.models.products import Product
     from app.models.users import User
 
     yield

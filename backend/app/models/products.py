@@ -1,7 +1,9 @@
 from datetime import datetime, timezone
 from typing import Optional
-from sqlalchemy import String, ForeignKey, Text, DECIMAL
+
+from sqlalchemy import DECIMAL, ForeignKey, String, Text
 from sqlalchemy.orm import Mapped, mapped_column, relationship
+
 from ..database import Base
 
 

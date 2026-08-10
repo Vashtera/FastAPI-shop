@@ -1,9 +1,7 @@
-import sys
-from pathlib import Path
-
-
 import asyncio
+import sys
 from logging.config import fileConfig
+from pathlib import Path
 
 from sqlalchemy import pool
 from sqlalchemy.engine import Connection
@@ -15,11 +13,11 @@ sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
 
 from app.core.config import settings
 from app.database import Base
+from app.models.categories import Category
+from app.models.products import Product
 
 # Импортируем ВСЕ модели, чтобы Alembic их "видел"
 from app.models.users import User
-from app.models.categories import Category
-from app.models.products import Product
 
 # this is the Alembic Config object, which provides
 # access to the values within the .ini file in use.

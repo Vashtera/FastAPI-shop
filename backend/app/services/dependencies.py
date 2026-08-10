@@ -2,6 +2,7 @@ from fastapi import Depends, HTTPException, status
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.database import SessionLocal
+
 from ..core.security import oauth2_scheme, verify_access_token
 from ..repositories.users_repo import UserRepo
 

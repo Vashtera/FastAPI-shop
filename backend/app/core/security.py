@@ -1,8 +1,8 @@
 from datetime import UTC, datetime, timedelta
 
 import jwt
-from jwt.exceptions import InvalidTokenError
 from fastapi.security import OAuth2PasswordBearer
+from jwt.exceptions import InvalidTokenError
 from pwdlib import PasswordHash
 
 from ..core.config import settings

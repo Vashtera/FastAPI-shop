@@ -1,7 +1,8 @@
 from pathlib import Path
+from typing import List, Union
+
 from pydantic import SecretStr
 from pydantic_settings import BaseSettings, SettingsConfigDict
-from typing import List, Union
 
 """
 Это путь к корневой папке backend проекта, вычисленный автоматически 
