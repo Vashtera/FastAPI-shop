@@ -418,13 +418,6 @@ EOF
     print_success "Nginx конфигурация создана"
 }
 
-# Обновление docker-compose.yml
-update_docker_compose() {
-    print_step "Обновление docker-compose.yml"
-
-    cat > docker-compose.yml << EOF
-version: '3.8'
-
 services:
   backend:
     build:
@@ -507,25 +500,29 @@ update_backend_dockerfile() {
     print_step "Обновление backend Dockerfile"
 
     cat > backend/Dockerfile << EOF
-FROM python:3.11-slim
+# Базовый образ — с чего начинаем (уже содержит Python нужной версии)
+FROM python:3.12-slim
 
+# Рабочая директория внутри контейнера
 WORKDIR /app
 
-RUN apt-get update && apt-get install -y \\
-    gcc \\
-    && rm -rf /var/lib/apt/lists/*
+# Копируем файлы зависимостей ОТДЕЛЬНО от остального кода
+COPY pyproject.toml poetry.lock ./
 
-COPY backend/requirements.txt .
-RUN pip install --no-cache-dir -r requirements.txt
+# Устанавливаем Poetry и зависимости
+RUN pip install poetry && \
+    poetry config virtualenvs.create false && \
+    poetry install --no-root --only main
 
-COPY backend/ .
+# Копируем весь остальной код проекта
+COPY . .
 
-# Создаем директорию static в правильном месте
+# Создаем директорию static в правильном месте.
 RUN mkdir -p static/images
 
 RUN chmod -R 755 static
 
-EXPOSE 8000
+EXPOSE 8000 
 
 CMD ["uvicorn", "app.main:app", "--host", "0.0.0.0", "--port", "8000"]
 EOF
@@ -538,12 +535,12 @@ update_frontend_dockerfile() {
     print_step "Обновление frontend Dockerfile"
 
     cat > frontend/Dockerfile << EOF
-FROM node:20-alpine as build
+FROM node:22-alpine as build
 
 WORKDIR /app
 
 ARG VITE_API_BASE_URL
-ENV VITE_API_BASE_URL=\${VITE_API_BASE_URL}
+ENV VITE_API_BASE_URL=${VITE_API_BASE_URL}
 
 COPY package*.json ./
 RUN npm ci
@@ -720,8 +717,6 @@ main() {
     install_certbot
     obtain_ssl_certificates
     configure_nginx
-    update_docker_compose
-    update_frontend_dockerfile
     create_directories
     build_and_run_docker
     seed_database
