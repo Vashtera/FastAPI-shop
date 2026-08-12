@@ -13,10 +13,13 @@ RUN pip install poetry && \
     poetry install --no-root --only main
 
 # Копируем весь остальной код проекта
-COPY . .
+COPY backend/ .
 
-# Порт, который слушает приложение внутри контейнера
+# Создаем директорию static в правильном месте
+RUN mkdir -p static/images
+
+RUN chmod -R 755 static
+
 EXPOSE 8000
 
-# Команда которая запускается при старте контейнера
 CMD ["uvicorn", "app.main:app", "--host", "0.0.0.0", "--port", "8000"]
