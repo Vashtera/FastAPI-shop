@@ -12,7 +12,7 @@ from ..services.user import (
     register,
 )
 
-router = APIRouter(prefix="api/users", tags=["users"])
+router = APIRouter(prefix="/api/users", tags=["users"])
 
 
 @router.post("/registration/", response_model=UserResponse)
