@@ -1,14 +1,21 @@
 services:
   backend:
-    build: ./backend
-    # ports: - "8000:8000" # Можно закомментировать, если доступ только через nginx
-    env_file:
-      - backend/.env
-    depends_on:
-      db:
-        condition: service_healthy
-      redis:
-        condition: service_started
+    build:
+      context: .
+      dockerfile: backend/Dockerfile
+    container_name: fashop_backend
+    command: uvicorn app.main:app --host 0.0.0.0 --port 8000
+    volumes:
+      - ./backend:/app
+      - backend_static:/app/static
+    environment:
+      - APP_NAME=${APP_NAME:-FastAPI Shop}
+      - DEBUG=${DEBUG:-False}
+      - DATABASE_URL=sqlite:///./shop.db
+      - CORS_ORIGINS=https://${DOMAIN},https://www.${DOMAIN}
+    expose:
+      - "8000"
+    restart: unless-stopped
     networks:
       - fashop_network
 
@@ -40,8 +47,7 @@ services:
       - "443:443"
     environment:
       - DOMAIN=${DOMAIN}
-    # Используем одинарные кавычки для DOMAIN в envsubst, чтобы избежать конфликтов
-    command: /bin/sh -c "envsubst '$$DOMAIN' < /etc/nginx/nginx.conf.template > /etc/nginx/nginx.conf && nginx -g 'daemon off;'"
+    command: /bin/sh -c "envsubst '$${DOMAIN}' < /etc/nginx/nginx.conf.template > /etc/nginx/nginx.conf && nginx -g 'daemon off;'"
     depends_on:
       - backend
       - frontend
