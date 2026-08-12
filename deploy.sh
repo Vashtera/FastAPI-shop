@@ -428,8 +428,8 @@ version: '3.8'
 services:
   backend:
     build:
-      context: .
-      dockerfile: backend/Dockerfile
+      context: ./backend
+      dockerfile: Dockerfile
     container_name: fashop_backend
     command: uvicorn backend.app.main:app --host 0.0.0.0 --port 8000
     volumes:
