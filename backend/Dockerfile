@@ -13,7 +13,7 @@ RUN pip install poetry && \
     poetry install --no-root --only main
 
 # Копируем весь остальной код проекта
-COPY backend/ .
+COPY . .
 
 # Создаем директорию static в правильном месте.
 RUN mkdir -p static/images
