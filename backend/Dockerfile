@@ -15,11 +15,11 @@ RUN pip install poetry && \
 # Копируем весь остальной код проекта
 COPY backend/ .
 
-# Создаем директорию static в правильном месте
+# Создаем директорию static в правильном месте.
 RUN mkdir -p static/images
 
 RUN chmod -R 755 static
 
-EXPOSE 8000
+EXPOSE 8000 
 
 CMD ["uvicorn", "app.main:app", "--host", "0.0.0.0", "--port", "8000"]
