@@ -5,7 +5,6 @@ description = "My first shop on FastAPI"
 authors = [
     {name = "vashtera",email = "raul.aytbaev@gmail.com"}
 ]
-package-mode = false
 requires-python = ">=3.12"
 dependencies = [
     "fastapi (>=0.138.0,<0.139.0)",
@@ -25,6 +24,9 @@ dependencies = [
     "redis (>=8.0.1,<9.0.0)",
     "alembic (>=1.18.5,<2.0.0)",
 ]
+
+[tool.poetry]
+package-mode = false
 
 
 [build-system]
