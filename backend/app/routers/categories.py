@@ -5,7 +5,7 @@ from ..schemas.users import UserResponse
 from ..services.categories import CategoryService as ctg_service
 from ..services.dependencies import get_admin, get_session
 
-router = APIRouter(prefix="/api/categories", tags=["categories"])
+router = APIRouter(prefix="/categories", tags=["categories"])
 
 
 def get_ctg_service(session=Depends(get_session)):
