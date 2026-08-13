@@ -100,4 +100,5 @@ networks:
     driver: bridge
 
 volumes:
+  postgres_data: 
   backend_static:
