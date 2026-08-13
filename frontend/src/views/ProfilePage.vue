@@ -380,4 +380,38 @@ textarea {
   color: #555555;
   margin-top: 8px;
 }
+
+/* ===== MOBILE FIXES ===== */
+@media (max-width: 640px) {
+  .profile-page {
+    padding: 24px 16px;
+  }
+  .page-title {
+    font-size: 22px;
+  }
+  .card {
+    padding: 16px;
+  }
+  .pending-item {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 12px;
+  }
+  .pending-actions {
+    flex-direction: row;
+    width: 100%;
+  }
+  .pending-actions .btn {
+    flex: 1;
+    text-align: center;
+  }
+  .form-row {
+    flex-direction: column;
+  }
+  .form-row input,
+  .form-row select {
+    width: 100%;
+    min-width: auto;
+  }
+}
 </style>

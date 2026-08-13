@@ -1,38 +1,33 @@
 <!-- frontend/src/views/HomePage.vue -->
-<!--
-  Главная страница с каталогом товаров.
-  Отображает список товаров и фильтр по категориям.
--->
-
 <template>
   <div class="min-h-screen bg-white">
-    <div class="max-w-7xl mx-auto px-4 py-8">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
       <!-- Заголовок -->
       <div class="mb-8">
-        <h1 class="text-4xl font-extrabold text-black mb-2">Product Catalog</h1>
+        <h1 class="text-3xl sm:text-4xl font-extrabold text-black mb-2">Product Catalog</h1>
         <p class="text-gray-500">Discover our amazing products</p>
       </div>
 
-      <div class="flex gap-8">
-        <!-- Боковая панель с фильтром -->
-        <aside class="w-64 flex-shrink-0">
+      <!-- flex-col на мобильных, flex-row на десктопе -->
+      <div class="flex flex-col lg:flex-row gap-8">
+        <!-- Боковая панель: полная ширина на мобилке -->
+        <aside class="w-full lg:w-64 shrink-0">
           <CategoryFilter />
         </aside>
 
         <!-- Основное содержимое -->
-        <main class="flex-grow">
+        <main class="flex-1 min-w-0">
           <!-- Информация о фильтрации -->
-          <div class="mb-6 flex items-center justify-between">
+          <div class="mb-6 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2">
             <p class="text-gray-700">
               <span class="font-bold">{{ productsStore.productsCount }}</span>
               {{ productsStore.productsCount === 1 ? 'product' : 'products' }} found
             </p>
 
-            <!-- Кнопка сброса фильтра -->
             <button
               v-if="productsStore.selectedCategory"
               @click="productsStore.clearCategoryFilter"
-              class="text-sm text-gray-500 hover:text-black transition-colors font-medium"
+              class="self-start text-sm text-gray-500 hover:text-black transition-colors font-medium"
             >
               Clear filter
             </button>
@@ -40,9 +35,7 @@
 
           <!-- Состояние загрузки -->
           <div v-if="productsStore.loading" class="text-center py-12">
-            <div
-              class="inline-block animate-spin rounded-none h-12 w-12 border-b-2 border-black"
-            ></div>
+            <div class="inline-block animate-spin rounded-none h-12 w-12 border-b-2 border-black"></div>
             <p class="mt-4 text-gray-500">Loading products...</p>
           </div>
 
@@ -54,7 +47,7 @@
           <!-- Список товаров -->
           <div
             v-else-if="productsStore.filteredProducts.length > 0"
-            class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"
+            class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-6"
           >
             <ProductCard
               v-for="product in productsStore.filteredProducts"
@@ -101,9 +94,6 @@ import CategoryFilter from '@/components/CategoryFilter.vue'
 
 const productsStore = useProductsStore()
 
-/**
- * Загрузить данные при монтировании компонента
- */
 onMounted(async () => {
   await Promise.all([productsStore.fetchProducts(), productsStore.fetchCategories()])
 })

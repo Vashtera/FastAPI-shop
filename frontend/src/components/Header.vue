@@ -5,7 +5,7 @@
       <div class="flex items-center justify-between h-20">
 
         <!-- Логотип -->
-        <router-link to="/" class="flex items-center space-x-2 group">
+        <router-link to="/" class="flex items-center space-x-2 group shrink-0">
           <svg
             xmlns="http://www.w3.org/2000/svg"
             class="h-8 w-8 group-hover:scale-110 transition-transform"
@@ -20,13 +20,11 @@
               d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z"
             />
           </svg>
-          <span class="text-2xl font-bold text-black">FastAPI Shop</span>
+          <span class="text-xl sm:text-2xl font-bold text-black">FastAPI Shop</span>
         </router-link>
 
-        <!-- Навигация -->
-        <nav class="flex items-center space-x-6">
-
-          <!-- Каталог -->
+        <!-- Десктоп навигация -->
+        <nav class="hidden md:flex items-center space-x-6">
           <router-link
             to="/"
             class="text-gray-700 hover:text-black transition-colors font-medium"
@@ -35,7 +33,6 @@
             Catalog
           </router-link>
 
-          <!-- Корзина -->
           <router-link
             to="/cart"
             class="relative flex items-center space-x-1 text-gray-700 hover:text-black transition-colors font-medium"
@@ -64,16 +61,14 @@
             </span>
           </router-link>
 
-          <!-- Авторизован: Profile и кнопка выхода -->
           <template v-if="authStore.isAuthenticated">
-              <router-link
-                to="/profile"
-                class="text-gray-700 hover:text-black transition-colors font-medium"
-                active-class="text-black font-semibold"
+            <router-link
+              to="/profile"
+              class="text-gray-700 hover:text-black transition-colors font-medium"
+              active-class="text-black font-semibold"
             >
               Profile
             </router-link>
-
             <button
               @click="handleLogout"
               class="text-gray-700 hover:text-black transition-colors font-medium"
@@ -82,30 +77,103 @@
             </button>
           </template>
 
-        <!-- Не авторизован: вход и регистрация -->
+          <template v-else>
+            <router-link
+              to="/login"
+              class="text-gray-700 hover:text-black transition-colors font-medium"
+              active-class="text-black font-semibold"
+            >
+              Sign in
+            </router-link>
+            <router-link
+              to="/register"
+              class="bg-black text-white px-4 py-2 font-semibold hover:bg-gray-800 transition-colors"
+            >
+              Register
+            </router-link>
+          </template>
+        </nav>
+
+        <!-- Бургер кнопка -->
+        <button
+          @click="menuOpen = !menuOpen"
+          class="md:hidden p-2 text-black focus:outline-none"
+          aria-label="Toggle menu"
+        >
+          <svg v-if="!menuOpen" class="h-7 w-7" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16M4 18h16"/>
+          </svg>
+          <svg v-else class="h-7 w-7" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/>
+          </svg>
+        </button>
+      </div>
+    </div>
+
+    <!-- Мобильное меню -->
+    <div v-if="menuOpen" class="md:hidden border-t border-gray-200 bg-white">
+      <div class="px-4 pt-2 pb-4 space-y-1">
+        <router-link
+          @click="menuOpen = false"
+          to="/"
+          class="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-black hover:bg-gray-50"
+          active-class="text-black font-semibold bg-gray-100"
+        >
+          Catalog
+        </router-link>
+        <router-link
+          @click="menuOpen = false"
+          to="/cart"
+          class="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-black hover:bg-gray-50"
+          active-class="text-black font-semibold bg-gray-100"
+        >
+          Cart
+          <span v-if="cartStore.itemsCount > 0" class="ml-2 bg-black text-white text-xs font-bold rounded-full h-5 w-5 inline-flex items-center justify-center">
+            {{ cartStore.itemsCount }}
+          </span>
+        </router-link>
+
+        <template v-if="authStore.isAuthenticated">
+          <router-link
+            @click="menuOpen = false"
+            to="/profile"
+            class="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-black hover:bg-gray-50"
+            active-class="text-black font-semibold bg-gray-100"
+          >
+            Profile
+          </router-link>
+          <button
+            @click="handleLogout; menuOpen = false"
+            class="block w-full text-left px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-black hover:bg-gray-50"
+          >
+            Sign out
+          </button>
+        </template>
+
         <template v-else>
           <router-link
+            @click="menuOpen = false"
             to="/login"
-            class="text-gray-700 hover:text-black transition-colors font-medium"
-            active-class="text-black font-semibold"
+            class="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-black hover:bg-gray-50"
+            active-class="text-black font-semibold bg-gray-100"
           >
             Sign in
           </router-link>
           <router-link
+            @click="menuOpen = false"
             to="/register"
-            class="bg-black text-white px-4 py-2 font-semibold hover:bg-gray-800 transition-colors"
+            class="block px-3 py-2 rounded-md text-base font-medium bg-black text-white hover:bg-gray-800"
           >
             Register
           </router-link>
         </template>
-
-        </nav>
       </div>
     </div>
   </header>
 </template>
 
 <script setup>
+import { ref } from 'vue'
 import { useRouter } from 'vue-router'
 import { useCartStore } from '@/stores/cart'
 import { useAuthStore } from '@/stores/auth'
@@ -113,6 +181,7 @@ import { useAuthStore } from '@/stores/auth'
 const cartStore = useCartStore()
 const authStore = useAuthStore()
 const router = useRouter()
+const menuOpen = ref(false)
 
 function handleLogout() {
   authStore.logout()

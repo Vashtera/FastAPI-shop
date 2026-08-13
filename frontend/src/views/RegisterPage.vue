@@ -1,24 +1,20 @@
 <!-- frontend/src/views/RegisterPage.vue -->
 <template>
-  <main class="min-h-screen bg-gray-50 flex items-center justify-center px-4">
+  <main class="min-h-screen bg-gray-50 flex items-center justify-center px-4 py-8">
     <div class="w-full max-w-md">
-
-      <!-- Заголовок -->
       <div class="mb-8">
-        <h1 class="text-3xl font-bold text-black">Create account</h1>
+        <h1 class="text-2xl sm:text-3xl font-bold text-black">Create account</h1>
         <p class="text-gray-500 mt-1">Join FastAPI Shop</p>
       </div>
 
-      <!-- Форма -->
-      <form @submit.prevent="handleRegister" class="bg-white border-2 border-black p-8 space-y-5">
+      <form @submit.prevent="handleRegister" class="bg-white border-2 border-black p-6 sm:p-8 space-y-5">
 
-        <!-- Ошибка -->
         <div v-if="authStore.error" class="bg-red-50 border border-red-200 text-red-700 px-4 py-3 text-sm">
           {{ authStore.error }}
         </div>
 
-        <!-- First name + Last name -->
-        <div class="grid grid-cols-2 gap-4">
+        <!-- Имя: на мобилке в колонку -->
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
           <div>
             <label class="block text-sm font-semibold text-black mb-1">First name</label>
             <input
@@ -43,7 +39,6 @@
           </div>
         </div>
 
-        <!-- Email -->
         <div>
           <label class="block text-sm font-semibold text-black mb-1">Email</label>
           <input
@@ -55,7 +50,6 @@
           />
         </div>
 
-        <!-- Password -->
         <div>
           <label class="block text-sm font-semibold text-black mb-1">Password</label>
           <input
@@ -68,7 +62,6 @@
           />
         </div>
 
-        <!-- Submit -->
         <button
           type="submit"
           :disabled="authStore.loading"
@@ -78,14 +71,12 @@
         </button>
       </form>
 
-      <!-- Ссылка на вход -->
       <p class="text-center text-gray-500 mt-6 text-sm">
         Already have an account?
         <router-link to="/login" class="text-black font-semibold underline hover:no-underline">
           Sign in
         </router-link>
       </p>
-
     </div>
   </main>
 </template>

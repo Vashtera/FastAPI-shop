@@ -1,23 +1,18 @@
 <!-- frontend/src/views/LoginPage.vue -->
 <template>
-  <main class="min-h-screen bg-gray-50 flex items-center justify-center px-4">
+  <main class="min-h-screen bg-gray-50 flex items-center justify-center px-4 py-8">
     <div class="w-full max-w-md">
-
-      <!-- Заголовок -->
       <div class="mb-8">
-        <h1 class="text-3xl font-bold text-black">Sign in</h1>
+        <h1 class="text-2xl sm:text-3xl font-bold text-black">Sign in</h1>
         <p class="text-gray-500 mt-1">Welcome back</p>
       </div>
 
-      <!-- Форма -->
-      <form @submit.prevent="handleLogin" class="bg-white border-2 border-black p-8 space-y-5">
+      <form @submit.prevent="handleLogin" class="bg-white border-2 border-black p-6 sm:p-8 space-y-5">
 
-        <!-- Ошибка -->
         <div v-if="authStore.error" class="bg-red-50 border border-red-200 text-red-700 px-4 py-3 text-sm">
           {{ authStore.error }}
         </div>
 
-        <!-- Email -->
         <div>
           <label class="block text-sm font-semibold text-black mb-1">Email</label>
           <input
@@ -29,7 +24,6 @@
           />
         </div>
 
-        <!-- Password -->
         <div>
           <label class="block text-sm font-semibold text-black mb-1">Password</label>
           <input
@@ -41,7 +35,6 @@
           />
         </div>
 
-        <!-- Submit -->
         <button
           type="submit"
           :disabled="authStore.loading"
@@ -51,14 +44,12 @@
         </button>
       </form>
 
-      <!-- Ссылка на регистрацию -->
       <p class="text-center text-gray-500 mt-6 text-sm">
         Don't have an account?
         <router-link to="/register" class="text-black font-semibold underline hover:no-underline">
           Create one
         </router-link>
       </p>
-
     </div>
   </main>
 </template>
@@ -77,10 +68,8 @@ const form = reactive({
 })
 
 async function handleLogin() {
-  console.log('handleLogin called', form.email, form.password)
   authStore.clearError()
   const success = await authStore.login(form.email, form.password)
-  console.log('login result:', success)
   if (success) {
     router.push({ name: 'home' })
   }
