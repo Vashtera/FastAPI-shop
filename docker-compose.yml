@@ -12,7 +12,7 @@ services:
       - APP_NAME=${APP_NAME:-FastAPI Shop}
       - DEBUG=${DEBUG:-False}
       - DATABASE_URL=postgresql+asyncpg://321are10:7612Mudevo@db:5432/fastapi-shop
-      - REDIS_URL=redis://localhost:6379/0
+      - REDIS_URL=redis://redis:6379/0
       - CORS_ORIGINS=https://${DOMAIN},https://www.${DOMAIN}
     expose:
       - "8000"

@@ -21,7 +21,7 @@ class RedisCache:
         """
         Args:
             redis_url: адрес подключения к Redis, например
-                "redis://localhost:6379/0"
+                "redis://redis:6379/0"
             cache_ttl_seconds: через сколько секунд неактивная
                 # корзина будет автоматически удалена Redis'ом
                 (по умолчанию 86400 секунд = 24 часа)
