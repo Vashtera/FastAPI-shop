@@ -16,7 +16,7 @@ class Product(Base):
     description: Mapped[Optional[str]] = mapped_column(Text)
     price: Mapped[float] = mapped_column(DECIMAL, nullable=False)
     created_at: Mapped[datetime] = mapped_column(
-        default=lambda: datetime.now(timezone.utc)
+        default=datetime.now
     )
     image_url: Mapped[Optional[str]] = mapped_column(String)
     status: Mapped[str] = mapped_column(String, default="pending")

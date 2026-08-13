@@ -15,7 +15,6 @@ from app.core.config import settings
 from app.database import Base
 from app.models.categories import Category
 from app.models.products import Product
-
 # Импортируем ВСЕ модели, чтобы Alembic их "видел"
 from app.models.users import User
 
