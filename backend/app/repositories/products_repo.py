@@ -36,7 +36,7 @@ class ProductRepo:
         stmt = (
             select(Product)
             .where(Product.status == "approve")
-            .options(joinedload(Product.categories))
+            .options(joinedload(Product.category))
         )
         result = await self.session.execute(stmt)
         return result.scalars().all()
@@ -55,7 +55,7 @@ class ProductRepo:
             select(Product)
             .where(Product.id == product_id)
             .where(Product.status == "approve")
-            .options(joinedload(Product.categories))
+            .options(joinedload(Product.category))
         )
         result = await self.session.execute(stmt)
         return result.scalar_one_or_none()
@@ -75,7 +75,7 @@ class ProductRepo:
         """
         stmt = (
             select(Product)
-            .options(joinedload(Product.categories))
+            .options(joinedload(Product.category))
             .where(Product.id.in_(product_ids), Product.status == "approve")
         )
         result = await self.session.execute(stmt)
@@ -93,7 +93,7 @@ class ProductRepo:
         """
         stmt = (
             select(Product)
-            .options(joinedload(Product.categories))
+            .options(joinedload(Product.category))
             .where(Product.category_id == category_id, Product.status == "approve")
         )
         result = await self.session.execute(stmt)
@@ -113,7 +113,7 @@ class ProductRepo:
             select(Product)
             .where(Product.id == id)
             .where(Product.status == "pending")
-            .options(joinedload(Product.categories))
+            .options(joinedload(Product.category))
         )
         result = await self.session.execute(stmt)
         return result.scalar_one_or_none()
@@ -156,7 +156,7 @@ class ProductRepo:
         """
         stmt = (
             select(Product)
-            .options(joinedload(Product.categories))
+            .options(joinedload(Product.category))
             .where(Product.status == "pending")
         )
         result = await self.session.execute(stmt)
