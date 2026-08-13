@@ -4,7 +4,7 @@ from ..schemas.products import ProductCreate, ProductListResponse, ProductRespon
 from ..services.dependencies import get_admin, get_seller, get_session
 from ..services.products import ProductService as prod_service
 
-router = APIRouter(prefix="/products", tags=["products"])
+router = APIRouter(prefix="/api/products", tags=["products"])
 
 
 def get_prod_service(session=Depends(get_session)):  

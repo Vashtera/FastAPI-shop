@@ -5,7 +5,7 @@ from ..schemas.cart import CartCreate, CartItemUpdate, CartResponse
 from ..services.cart import CartService
 from ..services.dependencies import get_current_user, get_session
 
-router = APIRouter(prefix="/cart", tags=["cart"])
+router = APIRouter(prefix="/api/cart", tags=["cart"])
 
 
 def get_cart_service(session=Depends(get_session)):
