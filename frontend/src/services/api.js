@@ -1,4 +1,4 @@
-// frontend/src/services/api.js
+// frontend/src/services.js
 /**
  * API сервис для взаимодействия с backend.
  */
@@ -55,31 +55,31 @@ export const authAPI = {
  */
 export const productsAPI = {
   getAll() {
-    return apiClient.get('/api/products')
+    return apiClient.get('/products')
   },
 
   getById(id) {
-    return apiClient.get(`/api/products/${id}`)
+    return apiClient.get(`/products/${id}`)
   },
 
   getByCategory(categoryId) {
-    return apiClient.get(`/api/products/category/${categoryId}`)
+    return apiClient.get(`/products/category/${categoryId}`)
   },
 
   create(productData) {
-    return apiClient.post('/api/products/add', productData)
+    return apiClient.post('/products/add', productData)
   },
 
   getPending() {
-    return apiClient.get('/api/products/admin/products/pending')
+    return apiClient.get('/products/admin/products/pending')
   },
 
   approve(productId) {
-    return apiClient.put(`/api/products/admin/products/${productId}/approve`)
+    return apiClient.put(`/products/admin/products/${productId}/approve`)
   },
 
   reject(productId) {
-    return apiClient.put(`/api/products/admin/products/${productId}/reject`)
+    return apiClient.put(`/products/admin/products/${productId}/reject`)
   },
 }
 
@@ -88,15 +88,15 @@ export const productsAPI = {
  */
 export const categoriesAPI = {
   getAll() {
-    return apiClient.get('/api/categories')
+    return apiClient.get('/categories')
   },
 
   getById(id) {
-    return apiClient.get(`/api/categories/${id}`)
+    return apiClient.get(`/categories/${id}`)
   },
 
   create(categoryData) {
-    return apiClient.post('/api/categories/add', categoryData)
+    return apiClient.post('/categories/add', categoryData)
   },
 }
 
@@ -105,23 +105,23 @@ export const categoriesAPI = {
  */
 export const cartAPI = {
   addItem(productId, quantity) {
-    return apiClient.post('/api/cart/add', null, {
+    return apiClient.post('/cart/add', null, {
       params: { product_id: productId, quantity: quantity },
     })
   },
 
   getCart() {
-    return apiClient.get('/api/cart')
+    return apiClient.get('/cart')
   },
 
   updateItem(productId, quantity) {
-    return apiClient.put('/api/cart/update', null, {
+    return apiClient.put('/cart/update', null, {
       params: { product_id: productId, quantity: quantity },
     })
   },
 
   removeItem(productId) {
-    return apiClient.delete(`/api/cart/remove/${productId}`)
+    return apiClient.delete(`/cart/remove/${productId}`)
   },
 }
 
