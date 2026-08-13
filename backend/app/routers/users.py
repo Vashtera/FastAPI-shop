@@ -15,7 +15,7 @@ from ..services.user import (
 router = APIRouter(prefix="/api/users", tags=["users"])
 
 
-@router.post("/registration/", response_model=UserResponse)
+@router.post("/registration", response_model=UserResponse)
 async def registration(user: UserCreate, session=Depends(get_session)):
     """
     Регистрация нового пользователя.
@@ -33,7 +33,7 @@ async def registration(user: UserCreate, session=Depends(get_session)):
     return await register(user, session)
 
 
-@router.post("/login/", response_model=Token)
+@router.post("/login", response_model=Token)
 async def login(
     form_data: OAuth2PasswordRequestForm = Depends(),
     session: AsyncSession = Depends(get_session),
@@ -62,7 +62,7 @@ async def login(
     return {"access_token": access_token, "token_type": "bearer"}
 
 
-@router.put("/update_role/", status_code=status.HTTP_200_OK)
+@router.put("/update_role", status_code=status.HTTP_200_OK)
 async def give_seller_role(
     user_id: int = Query(..., description="ID пользователя"),
     session: AsyncSession = Depends(get_session),
@@ -81,7 +81,7 @@ async def give_seller_role(
     return await give_seller_role_service(user_id, session)
 
 
-@router.get("/me/", response_model=UserResponse, status_code=status.HTTP_200_OK)
+@router.get("/me", response_model=UserResponse, status_code=status.HTTP_200_OK)
 async def get_profile(
     user_id: int = Depends(get_current_user),
     session: AsyncSession = Depends(get_session),

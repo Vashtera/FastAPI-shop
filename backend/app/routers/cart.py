@@ -21,7 +21,7 @@ async def get_cart(
     return await service.get_cart_details(user_id.id)
 
 
-@router.post("/add/", status_code=status.HTTP_200_OK)
+@router.post("/add", status_code=status.HTTP_200_OK)
 async def add_to_cart(
     product_id: int,
     quantity: int,
@@ -33,7 +33,7 @@ async def add_to_cart(
     return {"cart": updated_cart}
 
 
-@router.put("/update/", status_code=status.HTTP_200_OK)
+@router.put("/update", status_code=status.HTTP_200_OK)
 async def update_cart(
     product_id: int,
     quantity: int,
@@ -45,7 +45,7 @@ async def update_cart(
     return {"cart": updated_cart}
 
 
-@router.delete("/remove/{product_id}/", status_code=status.HTTP_200_OK)
+@router.delete("/remove/{product_id}", status_code=status.HTTP_200_OK)
 async def remove_from_cart(
     product_id: int,
     user_id: int = Depends(get_current_user),

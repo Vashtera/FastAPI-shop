@@ -18,7 +18,7 @@ async def get_categories(service: ctg_service = Depends(get_ctg_service)):
 
 
 @router.get(
-    "/{category_id}/", response_model=CategoryResponse, status_code=status.HTTP_200_OK
+    "/{category_id}", response_model=CategoryResponse, status_code=status.HTTP_200_OK
 )
 async def get_category(
     category_id: int, service: ctg_service = Depends(get_ctg_service)
@@ -27,7 +27,7 @@ async def get_category(
 
 
 @router.post(
-    "/add/", response_model=CategoryResponse, status_code=status.HTTP_201_CREATED
+    "/add", response_model=CategoryResponse, status_code=status.HTTP_201_CREATED
 )
 async def create_category(
     category_data: CategoryCreate,
