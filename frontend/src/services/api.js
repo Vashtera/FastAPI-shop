@@ -27,24 +27,24 @@ apiClient.interceptors.request.use((config) => {
  */
 export const authAPI = {
   register(userData) {
-    return apiClient.post('/users/registration/', userData)
+    return apiClient.post('/users/registration', userData)
   },
 
   login(email, password) {
     const formData = new URLSearchParams()
     formData.append('username', email)
     formData.append('password', password)
-    return apiClient.post('/users/login/', formData, {
+    return apiClient.post('/users/login', formData, {
       headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
     })
   },
 
   getMe() {
-    return apiClient.get('/users/me/')
+    return apiClient.get('/users/me')
   },
 
   updateRole(userId) {
-    return apiClient.put('/users/update_role/', null, {
+    return apiClient.put('/users/update_role', null, {
       params: { user_id: userId },
     })
   },
